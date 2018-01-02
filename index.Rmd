@@ -1,0 +1,95 @@
+---
+title: "Plotting the Course Through Charted Waters"
+output: learnr::tutorial
+tutorial:
+  id: "org.wikimedia.mikhail.dataviz-literacy"
+  version: 0.0.9001
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Introduction
+
+Heat maps, stacked area plots, mosaic plots, choropleths -- oh my! There are so many different ways to visually convey relationships and patterns in data! In this workshop on data visualization literacy, you'll learn to recognize many popular types of charts and how to glean insights from them.
+
+This workshop is [available as open source](https://github.com/bearloga/wmf-allhands18). There is an [interactive version](https://bearloga.shinyapps.io/wmf-allhands18/) and a [static version](https://bearloga.github.io/wmf-allhands18/).
+
+|              | Contact Information                       |
+|-------------:|:------------------------------------------|
+| **Work**     | mikhail at wikimedia dot org              |
+| **Personal** | mikhail at mpopov dot com                 |
+| **IRC**      | bearloga in #wikimedia-discovery, etc.    |
+| **Twitter**  | [bearloga](https://twitter.com/bearloga)  |
+
+## Assessment
+
+Some questions to verify that you understand the core concepts in data visualization:
+
+```{r quiz}
+quiz(
+  question(
+    "Three types of quantitative variables are:",
+    answer("Continuous", correct = TRUE),
+    answer("Discrete", correct = TRUE),
+    answer("Ordinal", correct = TRUE),
+    answer("Qualitative"),
+    answer("Nominal"),
+    random_answer_order = TRUE
+  ),
+  question(
+    "Which basic chart is the best type for two quantitative variables?",
+    answer("pie"),
+    answer("bar"),
+    answer("scatter", correct = TRUE),
+    answer("histogram"),
+    answer("box and whiskers"),
+    random_answer_order = TRUE
+  ),
+  question(
+    "An effective data visualization will include some or all of the following:",
+    answer("Distribution of a variable", correct = TRUE),
+    answer("Relationship(s) between variables", correct = TRUE),
+    answer("Labels", correct = TRUE),
+    answer("Fancy fonts"),
+    answer("Aesthetically pleasing colors"),
+    answer("Interactivity"),
+    random_answer_order = TRUE
+  )
+)
+```
+
+## Examples
+
+### Storytelling
+
+- [A visual introduction to machine learning](http://www.r2d3.us/visual-intro-to-machine-learning-part-1/) by Stephanie Yee and Tony Chu
+- [Exploring Histograms](https://tinlizzie.org/histograms/), an essay by Aran Lunzer and Amelia McNamara
+- [Algorithms Tour](http://algorithms-tour.stitchfix.com/): How data science is woven into the fabric of StitchFix
+- [An Interactive Visualization of Every Line in Hamilton](https://pudding.cool/2017/03/hamilton/index.html) by Shirley Wu
+- [Constructed Career Paths from Job Switching Data](http://flowingdata.com/2017/11/28/career-paths/) by Nathan Yau
+
+### Showcases
+
+- [The New York Times Graphics Department](https://twitter.com/nytgraphics)
+- [Information is Beautiful Awards](https://www.informationisbeautifulawards.com/)
+- [FlowingData](http://flowingdata.com/)'s [10 Best Data Visualization Projects of 2017](https://flowingdata.com/2017/12/28/10-best-data-visualization-projects-of-2017/)
+
+## Resources
+
+### Further Reading
+
+- [The Visual Display of Quantitative Information](https://www.edwardtufte.com/tufte/books_vdqi) by Edward Tufte
+- [Handbook of Data Visualization](http://www.springer.com/us/book/9783540330363)
+
+### Making Your Own
+
+- [Visualize This: The FlowingData Guide to Design, Visualization, and Statistics](http://book.flowingdata.com/) by Nathan Yau
+- [R Graphics Cookbook](http://shop.oreilly.com/product/0636920063704.do) by Winston Chang
+- [ggplot2: Elegant Graphics for Data Analysis](http://ggplot2.org/book/) by Hadley Wickham
+- [Data Visualization with Python and JavaScript](http://shop.oreilly.com/product/0636920037057.do) by Kyran Dale
+- [SVG Animations: From Common UX Implementations to Complex Responsive Animation](http://shop.oreilly.com/product/0636920045335.do) by Sarah Drasner
+- [D3.js in Action](https://www.manning.com/books/d3js-in-action-second-edition) by Elijah Meeks
