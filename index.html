@@ -75,6 +75,162 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 </tbody>
 </table>
 </div>
+<div id="section-terms-and-basics" class="section level2">
+<h2>Terms and basics</h2>
+<div id="section-data-visualization-as-storytelling" class="section level3">
+<h3>Data visualization as storytelling</h3>
+<p>Graphical displays should:</p>
+<ul>
+<li>Show the data</li>
+<li>Induce the viewer to think about the substance rather than graphic design or format</li>
+<li>Avoid distorting the data</li>
+<li>Present many numbers in a small space</li>
+<li>Make large data sets coherent</li>
+<li>Encourage the eye to compare different pieces of data</li>
+</ul>
+<p>– Edward R. Tufte, <em>The Visual Display of Quantitative Information</em></p>
+</div>
+<div id="section-types-of-variables" class="section level3">
+<h3>Types of variables</h3>
+<ul>
+<li><em>Continuous</em> variables have an infinite range of possible values</li>
+<li><strong>Examples</strong>: time, age, weight, lengths (height, distance, time spent online), drug dosage</li>
+<li><em>Categorical</em> / <em>discrete</em> / <em>qualitative</em>:</li>
+<li><em>Nominal</em> variables have two or more categories that do not have an intrinsic order</li>
+<li><strong>Examples</strong>: gender, ethnicity, controls vs test group, operating system</li>
+<li><em>Ordinal</em> variables are like nominal, but the categories have an ordering/ranking</li>
+<li><strong>Examples</strong>: Likert (rating) scale, number of visits to a website</li>
+</ul>
+</div>
+<div id="section-things-to-look-for" class="section level3">
+<h3>Things to look for</h3>
+<ul>
+<li>Title (most plots should have this)</li>
+<li>Axis labels (almost all plots should have this)</li>
+<li>How many variables and their types</li>
+<li>Including ones used to dictate colors, shapes, patterns, sizes, opacities, etc.</li>
+<li>Independent (“<em>predictor</em>”) variables (e.g. time) are usually on the X (horizontal) axis</li>
+<li>Occasionally time is plotted on the vertical axis for specific reasons</li>
+<li>Dependent (“<em>outcome</em>” / “<em>response</em>”) variables are usually on the Y (vertical) axis</li>
+<li>Scales (especially log-transformed ones)</li>
+</ul>
+</div>
+</div>
+<div id="section-common-visualizations" class="section level2">
+<h2>Common visualizations</h2>
+<div id="section-pies-waffles-bars-and-tables" class="section level3">
+<h3>Pies, Waffles, Bars, and Tables</h3>
+<p>A <a href="https://en.wikipedia.org/wiki/Pie_chart">pie chart</a> and a <a href="https://en.wikipedia.org/wiki/Bar_chart">bar chart</a> (sometimes called a <em>bar plot</em>) are an easy way to visually compare values. The pie chart – where the slices represent proportions of the whole – is excellent for 2-4 categories, the table is great for 1-8 categories, and the bars’ heights work well for comparing more than 5 categories.</p>
+<img src="index_files/figure-html4/pie_chart-1.png" width="624" />
+<div class="figure">
+<img src="index_files/figure-html4/bar_chart-1.png" alt="Notice how the use of color allows us to compare survivorship within classes." width="624" />
+<p class="caption">
+Notice how the use of color allows us to compare survivorship within classes.
+</p>
+</div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Class</th>
+<th align="right">Did not survive</th>
+<th align="right">Survived</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1st</td>
+<td align="right">122</td>
+<td align="right">203</td>
+</tr>
+<tr class="even">
+<td align="left">2nd</td>
+<td align="right">167</td>
+<td align="right">118</td>
+</tr>
+<tr class="odd">
+<td align="left">3rd</td>
+<td align="right">528</td>
+<td align="right">178</td>
+</tr>
+<tr class="even">
+<td align="left">Crew</td>
+<td align="right">673</td>
+<td align="right">212</td>
+</tr>
+</tbody>
+</table>
+<p>In the past decade, an alternative to the pie chart called <em>waffle charts</em> (or “square pie charts”) has gained popularity at representing relative sizes between groups. (See See <a href="https://eagereyes.org/techniques/square-pie-charts">Women in IT – Squaring the Pie?</a>.) For example, it is much easier to visually compare 11 squares (2nd class passengers who survived) to 20 squares (1st class passengers who survived) than 1 slice to another slice that is 1.8 times bigger:</p>
+<p><img src="index_files/figure-html4/waffle-1.png" width="624" /></p>
+</div>
+<div id="section-histograms-and-densities" class="section level3">
+<h3>Histograms and Densities</h3>
+<p>A <a href="https://en.wikipedia.org/wiki/Histogram">histogram</a> shows the distribution of a continuous variable by splitting it into bins and counting how many observations fall into each bin (left). Sometimes those counts are divided by the total number of observation to yield proportions/probabilities instead (right). <strong>Note</strong> that the histogram on the right also includes a <a href="https://en.wikipedia.org/wiki/Density_estimation">probability density estimate</a>.</p>
+<p><img src="index_files/figure-html4/histograms-1.png" width="624" /></p>
+</div>
+<div id="section-comparing-distributions" class="section level3">
+<h3>Comparing Distributions</h3>
+<p>When you see one of these, they are for comparing distributions of a continuous variable (such as sepal length of Iris flowers) between different groups (such as different species):</p>
+<p><img src="index_files/figure-html4/comparing_distributions-1.png" width="624" /></p>
+<p>The <a href="https://en.wikipedia.org/wiki/Kernel_density_estimation">density plot</a> on the left is like a smooth histogram that doesn’t discretize the variable into bins. The <a href="https://en.wikipedia.org/wiki/Violin_plot">violin plot</a> on the right is a rotated version that makes it easier to perform the comparison because the densities (distributions) are not overlapping.</p>
+<p>A <a href="https://en.wikipedia.org/wiki/Box_plot">box-and-whiskers chart</a> (also known as a <em>box plot</em>) allows you to visually compare the distributions by way of a <a href="https://en.wikipedia.org/wiki/Five-number_summary">five number summary</a> which includes:</p>
+<ul>
+<li>Sample minimum (the smallest value)</li>
+<li>First <a href="https://en.wikipedia.org/wiki/Quartile">quartile</a> (<em>Q<sub>1</sub></em>) which is the 25th percentile</li>
+<li>Second quartile (<em>Q<sub>2</sub></em>) also known as the <a href="https://en.wikipedia.org/wiki/Median"><em>median</em></a></li>
+<li>Third quartile (<em>Q<sub>3</sub></em>) which is the 75th percentile</li>
+<li>Sample maximum (the largest value)</li>
+</ul>
+<p><img src="index_files/figure-html4/boxplot-1.png" width="624" /></p>
+<p>My personal preference is when a violin plot and a box plot are combined so you still see the distribution in case there are multiple peaks – or <a href="https://en.wikipedia.org/wiki/Mode_(statistics)"><em>modes</em></a> – (something you can’t see with a box plot) but you also see the summaries:</p>
+<div class="figure">
+<img src="index_files/figure-html4/violin_box_combined-1.png" alt="Notice how the box plot hides the three modes." width="624" />
+<p class="caption">
+Notice how the box plot hides the three modes.
+</p>
+</div>
+</div>
+<div id="section-multiple-variables" class="section level3">
+<h3>Multiple variables</h3>
+<p><a href="https://en.wikipedia.org/wiki/Scatter_plot">Scatter plots</a> are the most popular and simplest way to investigate relationships between quantitative variables:</p>
+<div class="figure">
+<img src="index_files/figure-html4/scatterplot-1.png" alt="Shape and color of the points are determined by the species. Shapes are often used together with color to make the graphic better for colorblindness and grayscale printing." width="624" />
+<p class="caption">
+Shape and color of the points are determined by the species. Shapes are often used together with color to make the graphic better for colorblindness and grayscale printing.
+</p>
+</div>
+<p>In fact, data scientists and analysts often use <em>scatterplot matrices</em> to look at many different relationships between pairs of variables simultaneously:</p>
+<p><img src="index_files/figure-html4/scatterplot_matrices-1.png" width="624" /></p>
+<p>At first glance there is <strong>a lot</strong> going on in that particular matrix, but really there are three main components that we can focus on just one at a time:</p>
+<ol style="list-style-type: decimal">
+<li>the upper triangle panels have basic scatter plots with points colored according to species for each pair of variables,</li>
+<li>the diagonal panels have histograms of the individual variables, and</li>
+<li>the lower triangle panels are also scatterplots, but with ellipses tracing the two-dimensional densities (assuming <a href="https://en.wikipedia.org/wiki/Multivariate_normal_distribution">Normality</a>).</li>
+</ol>
+<p><a href="https://en.wikipedia.org/wiki/Mosaic_plot">Mosaic plots</a> are used to visualize the relationships between two or more qualitative variables.</p>
+</div>
+</div>
+<div id="section-other-visualizations" class="section level2">
+<h2>Other visualizations</h2>
+<div id="section-heat-maps" class="section level3">
+<h3>Heat maps</h3>
+<p><a href="https://en.wikipedia.org/wiki/Heat_map">Heatmaps</a>…</p>
+</div>
+<div id="section-tree-maps" class="section level3">
+<h3>Tree maps</h3>
+<p><a href="https://en.wikipedia.org/wiki/Treemapping">Treemapping</a> is a way to visualize hierarchical (nested) data as rectangles within other rectangles. It is not dissimilar to a mosaic plot!</p>
+</div>
+<div id="section-choropleths" class="section level3">
+<h3>Choropleths</h3>
+<p><a href="https://en.wikipedia.org/wiki/Choropleth_map">Choropleths</a> are geographical maps that are colored and/or shaded according to some variable such as population density.</p>
+</div>
+</div>
+<div id="section-scales-and-transformed-data" class="section level2">
+<h2>Scales and transformed data</h2>
+<p>Sometimes the author of the visualization has chosen to apply a <a href="https://en.wikipedia.org/wiki/Data_transformation_(statistics)">transformation to the data</a> because the data is <a href="https://en.wikipedia.org/wiki/Skewness">skewed</a>. It is important to watch out for these, especially <a href="https://en.wikipedia.org/wiki/Logarithmic_scale">logarithmic scales</a>.</p>
+<p><img src="index_files/figure-html4/transformed_scatterplot-1.png" width="624" height="624" /></p>
+<p>It is possible (but rare) to encounter logarithmically scaled time axes, which are helpful when you have long tails caused by outliers:</p>
+<p><img src="index_files/figure-html4/transformed_histogram-1.png" width="624" /></p>
+</div>
 <div id="section-assessment" class="section level2">
 <h2>Assessment</h2>
 <p>Some questions to verify that you understand the core concepts in data visualization:</p>
@@ -84,77 +240,74 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <tr>
 <td>
 
-<div id="htmlwidget-278ac1c0d888f537581e" style="width:100%;height:auto;", class = "quiz html-widget">
+<div id="htmlwidget-c8443784442e84902141" style="width:100%;height:auto;", class = "quiz html-widget">
 <div class="panel panel-default">
 <div class="panel-body quizArea">
 </div>
 </div>
 </div>
 
-<script type="application/json" data-for="htmlwidget-278ac1c0d888f537581e">{"x":{"question":"Three types of quantitative variables are:","answers":[{"option":"Continuous","correct":true,"message":null},{"option":"Discrete","correct":true,"message":null},{"option":"Ordinal","correct":true,"message":null},{"option":"Qualitative","correct":false,"message":null},{"option":"Nominal","correct":false,"message":null}],"label":"quiz-1","skipStartButton":true,"perQuestionResponseAnswers":true,"perQuestionResponseMessaging":true,"preventUnanswered":true,"displayQuestionCount":false,"displayQuestionNumber":false,"disableRanking":true,"nextQuestionText":"","checkAnswerText":"Submit Answer","allowRetry":false,"randomSortAnswers":true,"json":{"info":{"name":"","main":""},"questions":[{"q":"Three types of quantitative variables are:","a":[{"option":"Continuous","correct":true,"message":null},{"option":"Discrete","correct":true,"message":null},{"option":"Ordinal","correct":true,"message":null},{"option":"Qualitative","correct":false,"message":null},{"option":"Nominal","correct":false,"message":null}],"correct":"Correct!","incorrect":"Incorrect."}]}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-c8443784442e84902141">{"x":{"question":"Three types of quantitative variables are:","answers":[{"option":"Continuous","correct":true,"message":null},{"option":"Discrete","correct":true,"message":null},{"option":"Ordinal","correct":true,"message":null},{"option":"Qualitative","correct":false,"message":null},{"option":"Nominal","correct":false,"message":null}],"label":"quiz-1","skipStartButton":true,"perQuestionResponseAnswers":true,"perQuestionResponseMessaging":true,"preventUnanswered":true,"displayQuestionCount":false,"displayQuestionNumber":false,"disableRanking":true,"nextQuestionText":"","checkAnswerText":"Submit Answer","allowRetry":false,"randomSortAnswers":true,"json":{"info":{"name":"","main":""},"questions":[{"q":"Three types of quantitative variables are:","a":[{"option":"Continuous","correct":true,"message":null},{"option":"Discrete","correct":true,"message":null},{"option":"Ordinal","correct":true,"message":null},{"option":"Qualitative","correct":false,"message":null},{"option":"Nominal","correct":false,"message":null}],"correct":"Correct!","incorrect":"Incorrect."}]}},"evals":[],"jsHooks":[]}</script>
 </td>
 </tr>
 <tr>
 <td>
 
-<div id="htmlwidget-c94a1b9eb7a3c113198b" style="width:100%;height:auto;", class = "quiz html-widget">
+<div id="htmlwidget-b7f619c3f2d14ea6f4f4" style="width:100%;height:auto;", class = "quiz html-widget">
 <div class="panel panel-default">
 <div class="panel-body quizArea">
 </div>
 </div>
 </div>
 
-<script type="application/json" data-for="htmlwidget-c94a1b9eb7a3c113198b">{"x":{"question":"Which basic chart is the best type for two quantitative variables?","answers":[{"option":"pie","correct":false,"message":null},{"option":"bar","correct":false,"message":null},{"option":"scatter","correct":true,"message":null},{"option":"histogram","correct":false,"message":null},{"option":"box and whiskers","correct":false,"message":null}],"label":"quiz-2","skipStartButton":true,"perQuestionResponseAnswers":true,"perQuestionResponseMessaging":true,"preventUnanswered":true,"displayQuestionCount":false,"displayQuestionNumber":false,"disableRanking":true,"nextQuestionText":"","checkAnswerText":"Submit Answer","allowRetry":false,"randomSortAnswers":true,"json":{"info":{"name":"","main":""},"questions":[{"q":"Which basic chart is the best type for two quantitative variables?","a":[{"option":"pie","correct":false,"message":null},{"option":"bar","correct":false,"message":null},{"option":"scatter","correct":true,"message":null},{"option":"histogram","correct":false,"message":null},{"option":"box and whiskers","correct":false,"message":null}],"correct":"Correct!","incorrect":"Incorrect."}]}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-b7f619c3f2d14ea6f4f4">{"x":{"question":"Which basic chart is the best type for two quantitative variables?","answers":[{"option":"pie","correct":false,"message":null},{"option":"bar","correct":false,"message":null},{"option":"scatter","correct":true,"message":null},{"option":"histogram","correct":false,"message":null},{"option":"box and whiskers","correct":false,"message":null}],"label":"quiz-2","skipStartButton":true,"perQuestionResponseAnswers":true,"perQuestionResponseMessaging":true,"preventUnanswered":true,"displayQuestionCount":false,"displayQuestionNumber":false,"disableRanking":true,"nextQuestionText":"","checkAnswerText":"Submit Answer","allowRetry":false,"randomSortAnswers":true,"json":{"info":{"name":"","main":""},"questions":[{"q":"Which basic chart is the best type for two quantitative variables?","a":[{"option":"pie","correct":false,"message":null},{"option":"bar","correct":false,"message":null},{"option":"scatter","correct":true,"message":null},{"option":"histogram","correct":false,"message":null},{"option":"box and whiskers","correct":false,"message":null}],"correct":"Correct!","incorrect":"Incorrect."}]}},"evals":[],"jsHooks":[]}</script>
 </td>
 </tr>
 <tr>
 <td>
 
-<div id="htmlwidget-28f8a3610e89796e7f81" style="width:100%;height:auto;", class = "quiz html-widget">
+<div id="htmlwidget-57432a5282ec824e0b6a" style="width:100%;height:auto;", class = "quiz html-widget">
 <div class="panel panel-default">
 <div class="panel-body quizArea">
 </div>
 </div>
 </div>
 
-<script type="application/json" data-for="htmlwidget-28f8a3610e89796e7f81">{"x":{"question":"An effective data visualization will include some or all of the following:","answers":[{"option":"Distribution of a variable","correct":true,"message":null},{"option":"Relationship(s) between variables","correct":true,"message":null},{"option":"Labels","correct":true,"message":null},{"option":"Fancy fonts","correct":false,"message":null},{"option":"Aesthetically pleasing colors","correct":false,"message":null},{"option":"Interactivity","correct":false,"message":null}],"label":"quiz-3","skipStartButton":true,"perQuestionResponseAnswers":true,"perQuestionResponseMessaging":true,"preventUnanswered":true,"displayQuestionCount":false,"displayQuestionNumber":false,"disableRanking":true,"nextQuestionText":"","checkAnswerText":"Submit Answer","allowRetry":false,"randomSortAnswers":true,"json":{"info":{"name":"","main":""},"questions":[{"q":"An effective data visualization will include some or all of the following:","a":[{"option":"Distribution of a variable","correct":true,"message":null},{"option":"Relationship(s) between variables","correct":true,"message":null},{"option":"Labels","correct":true,"message":null},{"option":"Fancy fonts","correct":false,"message":null},{"option":"Aesthetically pleasing colors","correct":false,"message":null},{"option":"Interactivity","correct":false,"message":null}],"correct":"Correct!","incorrect":"Incorrect."}]}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-57432a5282ec824e0b6a">{"x":{"question":"An effective data visualization will include some or all of the following:","answers":[{"option":"Distribution of a variable","correct":true,"message":null},{"option":"Relationship(s) between variables","correct":true,"message":null},{"option":"Labels","correct":true,"message":null},{"option":"Fancy fonts","correct":false,"message":null},{"option":"Aesthetically pleasing colors","correct":false,"message":null},{"option":"Interactivity","correct":false,"message":null}],"label":"quiz-3","skipStartButton":true,"perQuestionResponseAnswers":true,"perQuestionResponseMessaging":true,"preventUnanswered":true,"displayQuestionCount":false,"displayQuestionNumber":false,"disableRanking":true,"nextQuestionText":"","checkAnswerText":"Submit Answer","allowRetry":false,"randomSortAnswers":true,"json":{"info":{"name":"","main":""},"questions":[{"q":"An effective data visualization will include some or all of the following:","a":[{"option":"Distribution of a variable","correct":true,"message":null},{"option":"Relationship(s) between variables","correct":true,"message":null},{"option":"Labels","correct":true,"message":null},{"option":"Fancy fonts","correct":false,"message":null},{"option":"Aesthetically pleasing colors","correct":false,"message":null},{"option":"Interactivity","correct":false,"message":null}],"correct":"Correct!","incorrect":"Incorrect."}]}},"evals":[],"jsHooks":[]}</script>
 </td>
 </tr>
 </table>
 </div>
 </div>
-<div id="section-examples" class="section level2">
-<h2>Examples</h2>
-<div id="section-storytelling" class="section level3">
-<h3>Storytelling</h3>
+<div id="section-appendix" class="section level2">
+<h2>Appendix</h2>
+<div id="section-visual-essays" class="section level3">
+<h3>Visual essays</h3>
 <ul>
 <li><a href="http://www.r2d3.us/visual-intro-to-machine-learning-part-1/">A visual introduction to machine learning</a> by Stephanie Yee and Tony Chu</li>
-<li><a href="https://tinlizzie.org/histograms/">Exploring Histograms</a>, an essay by Aran Lunzer and Amelia McNamara</li>
+<li><a href="https://tinlizzie.org/histograms/">Exploring Histograms</a> by Aran Lunzer and Amelia McNamara</li>
 <li><a href="http://algorithms-tour.stitchfix.com/">Algorithms Tour</a>: How data science is woven into the fabric of StitchFix</li>
 <li><a href="https://pudding.cool/2017/03/hamilton/index.html">An Interactive Visualization of Every Line in Hamilton</a> by Shirley Wu</li>
 <li><a href="http://flowingdata.com/2017/11/28/career-paths/">Constructed Career Paths from Job Switching Data</a> by Nathan Yau</li>
 </ul>
 </div>
-<div id="section-showcases" class="section level3">
-<h3>Showcases</h3>
+<div id="section-collections" class="section level3">
+<h3>Collections</h3>
 <ul>
 <li><a href="https://twitter.com/nytgraphics">The New York Times Graphics Department</a></li>
 <li><a href="https://www.informationisbeautifulawards.com/">Information is Beautiful Awards</a></li>
 <li><a href="http://flowingdata.com/">FlowingData</a>’s <a href="https://flowingdata.com/2017/12/28/10-best-data-visualization-projects-of-2017/">10 Best Data Visualization Projects of 2017</a></li>
 </ul>
 </div>
-</div>
-<div id="section-resources" class="section level2">
-<h2>Resources</h2>
 <div id="section-further-reading" class="section level3">
-<h3>Further Reading</h3>
+<h3>Further reading</h3>
 <ul>
 <li><a href="https://www.edwardtufte.com/tufte/books_vdqi">The Visual Display of Quantitative Information</a> by Edward Tufte</li>
 <li><a href="http://www.springer.com/us/book/9783540330363">Handbook of Data Visualization</a></li>
 </ul>
 </div>
 <div id="section-making-your-own" class="section level3">
-<h3>Making Your Own</h3>
+<h3>Making your own</h3>
 <ul>
 <li><a href="http://book.flowingdata.com/">Visualize This: The FlowingData Guide to Design, Visualization, and Statistics</a> by Nathan Yau</li>
 <li><a href="http://shop.oreilly.com/product/0636920063704.do">R Graphics Cookbook</a> by Winston Chang</li>
@@ -164,11 +317,18 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <li><a href="https://www.manning.com/books/d3js-in-action-second-edition">D3.js in Action</a> by Elijah Meeks 
 <script type="application/shiny-prerendered" data-context="server-start">
 library(learnr)
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::register_http_handlers(session, metadata = list(id = "org.wikimedia.mikhail.dataviz-literacy", version = "0.0.9001"))
+learnr:::register_http_handlers(session, metadata = list(id = "org.wikimedia.mikhail.dataviz-literacy", version = "0.1.9000"))
+</script>
+ 
+<script type="application/shiny-prerendered" data-context="data">
+library(magrittr)
+library(dplyr)
+library(ggplot2)
+titanic <- data.frame(Titanic)
 </script>
  <!--html_preserve-->
 <script type="application/shiny-prerendered" data-context="dependencies">

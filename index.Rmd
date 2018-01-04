@@ -3,13 +3,19 @@ title: "Plotting the Course Through Charted Waters"
 output: learnr::tutorial
 tutorial:
   id: "org.wikimedia.mikhail.dataviz-literacy"
-  version: 0.0.9001
+  version: 0.1.9000
 runtime: shiny_prerendered
 ---
 
 ```{r setup, include=FALSE}
 library(learnr)
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+```{r data}
+library(magrittr)
+library(dplyr)
+library(ggplot2)
+titanic <- data.frame(Titanic)
 ```
 
 ## Introduction
@@ -24,6 +30,347 @@ This workshop is [available as open source](https://github.com/bearloga/wmf-allh
 | **Personal** | mikhail at mpopov dot com                 |
 | **IRC**      | bearloga in #wikimedia-discovery, etc.    |
 | **Twitter**  | [bearloga](https://twitter.com/bearloga)  |
+
+## Terms and basics
+
+### Data visualization as storytelling
+
+Graphical displays should:
+
+- Show the data
+- Induce the viewer to think about the substance rather than graphic design or format
+- Avoid distorting the data
+- Present many numbers in a small space
+- Make large data sets coherent
+- Encourage the eye to compare different pieces of data
+
+-- Edward R. Tufte, *The Visual Display of Quantitative Information*
+
+### Types of variables
+
+- *Continuous* variables have an infinite range of possible values
+- **Examples**: time, age, weight, lengths (height, distance, time spent online), drug dosage
+- *Categorical* / *discrete* / *qualitative*:
+- *Nominal* variables have two or more categories that do not have an intrinsic order
+- **Examples**: gender, ethnicity, controls vs test group, operating system
+- *Ordinal* variables are like nominal, but the categories have an ordering/ranking
+- **Examples**: Likert (rating) scale, number of visits to a website
+
+### Things to look for
+
+- Title (most plots should have this)
+- Axis labels (almost all plots should have this)
+- How many variables and their types
+- Including ones used to dictate colors, shapes, patterns, sizes, opacities, etc.
+- Independent ("*predictor*") variables (e.g. time) are usually on the X (horizontal) axis
+- Occasionally time is plotted on the vertical axis for specific reasons
+- Dependent ("*outcome*" / "*response*") variables are usually on the Y (vertical) axis
+- Scales (especially log-transformed ones)
+
+## Common visualizations
+
+### Pies, Waffles, Bars, and Tables
+
+A [pie chart](https://en.wikipedia.org/wiki/Pie_chart) and a [bar chart](https://en.wikipedia.org/wiki/Bar_chart) (sometimes called a *bar plot*) are an easy way to visually compare values. The pie chart -- where the slices represent proportions of the whole -- is excellent for 2-4 categories, the table is great for 1-8 categories, and the bars' heights work well for comparing more than 5 categories.
+
+```{r pie_chart}
+per_class <- titanic %>%
+  group_by(Class) %>%
+  summarize(Total = sum(Freq)) %>%
+  mutate(
+    Class = factor(Class, c("Crew", "3rd", "2nd", "1st")),
+    Prop = Total / sum(Total),
+    Position = cumsum(Prop) - (Prop / 2)
+  )
+ggplot(per_class, aes(x = factor(""), y = Prop, fill = Class)) +
+  geom_bar(width = 1, stat = "identity", color = "black") +
+  scale_fill_brewer(palette = "Set1") +
+  coord_polar("y") +
+  theme_minimal(14) +
+  theme(
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    panel.border = element_blank(),
+    panel.grid = element_blank(),
+    axis.ticks = element_blank(),
+    axis.text.x = element_blank()
+  ) +
+  geom_text(aes(y = Position, label = scales::percent(Prop)), size = 5) +
+  ggtitle("Pie chart of Titanic passengers by class")
+```
+```{r bar_chart, fig.cap='Notice how the use of color allows us to compare survivorship within classes.'}
+class_survival <- titanic %>%
+  group_by(Class, Survived) %>%
+  summarize(Passengers = sum(Freq))
+ggplot(class_survival, aes(y = Passengers, x = Class, fill = Survived)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  ggtitle("Bar chart of survivorship on Titanic by class",) +
+  theme_minimal(14)
+```
+```{r table, results='asis'}
+class_survival %>%
+  mutate(Survived = if_else(Survived == "Yes", "Survived", "Did not survive")) %>%
+  tidyr::spread(Survived, Passengers) %>%
+  knitr::kable(format = "markdown")
+```
+
+In the past decade, an alternative to the pie chart called *waffle charts* (or "square pie charts") has gained popularity at representing relative sizes between groups. (See See [Women in IT – Squaring the Pie?](https://eagereyes.org/techniques/square-pie-charts).) For example, it is much easier to visually compare 11 squares (2nd class passengers who survived) to 20 squares (1st class passengers who survived) than 1 slice to another slice that is 1.8 times bigger:
+
+```{r waffle, fig.width=12, fig.height=6, out.width=624}
+temp <- split(class_survival, class_survival$Survived) %>%
+  purrr::map(~ set_names(.x$Passengers, .x$Class) / 10)
+p1 <- class_survival %>%
+  mutate(Survived = factor(if_else(Survived == "Yes", "Survived", "Did not survive"), c("Survived", "Did not survive"))) %>%
+  group_by(Survived) %>%
+  mutate(
+    Prop = Passengers / sum(Passengers),
+    Position = cumsum(Prop) - (Prop / 2)
+  ) %>%
+  ggplot(aes(x = factor(""), y = Prop, fill = Class)) +
+  geom_bar(width = 1, stat = "identity", color = "black") +
+  facet_wrap(~ Survived) +
+  scale_fill_brewer(palette = "Set2") +
+  coord_polar("y") +
+  theme_minimal(14) +
+  theme(
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    panel.border = element_blank(),
+    panel.grid = element_blank(),
+    axis.ticks = element_blank(),
+    axis.text.x = element_blank()
+  ) +
+  geom_text(aes(y = Position, label = scales::percent(Prop)), size = 4) +
+  ggtitle("Titanic passengers by class")
+p2 <- waffle::waffle(
+  temp$Yes, rows = 5, size = 1,
+  xlab = "1 square = 10 passengers",
+  title = "Titanic passengers who survived"
+)
+p3 <- waffle::waffle(
+  temp$No, rows = 5, size = 1,
+  xlab = "1 square = 10 passengers",
+  title = "Titanic passengers who did not survive"
+)
+top_row <- cowplot::plot_grid(p1, p2, rel_widths = c(1, 1.3))
+cowplot::plot_grid(top_row, p3, ncol = 1)
+```
+
+### Histograms and Densities
+
+A [histogram](https://en.wikipedia.org/wiki/Histogram) shows the distribution of a continuous variable by splitting it into bins and counting how many observations fall into each bin (left). Sometimes those counts are divided by the total number of observation to yield proportions/probabilities instead (right). **Note** that the histogram on the right also includes a [probability density estimate](https://en.wikipedia.org/wiki/Density_estimation).
+
+```{r histograms, fig.width=10, fig.height=5, out.width=624}
+par(mfrow = c(1, 2))
+hist(trees$Height, col = "gray40",
+     main = "Height of Black Cheery Trees",
+     xlab = "Height (ft)")
+hist(trees$Height, col = "gray70",
+     main = "Height of Black Cheery Trees",
+     xlab = "Height (ft)", freq = FALSE, border = FALSE)
+lines(density(trees$Height, adj = 1), lwd = 2)
+```
+
+### Comparing Distributions
+
+When you see one of these, they are for comparing distributions of a continuous variable (such as sepal length of Iris flowers) between different groups (such as different species):
+
+```{r comparing_distributions, fig.width=10, fig.height=5, out.width=624}
+p1 <- ggplot(data = iris, aes(x = Sepal.Length, fill = Species)) +
+  geom_density(alpha = 0.5, adjust = 1.5) +
+  scale_fill_brewer(palette = "Set1") +
+  theme_minimal(14) +
+  labs(x = "Sepal length (cm)", title = "Density plot")
+p2 <- ggplot(data = iris, aes(y = Sepal.Length, x = Species)) +
+  geom_violin(aes(fill = Species), alpha = 0.5, adjust = 1.5) +
+  scale_fill_brewer(palette = "Set1") +
+  theme_minimal(14) +
+  labs(y = "Sepal length (cm)", title = "Violin plot")
+cowplot::plot_grid(p1, p2, nrow = 1)
+```
+
+The [density plot](https://en.wikipedia.org/wiki/Kernel_density_estimation) on the left is like a smooth histogram that doesn't discretize the variable into bins. The [violin plot](https://en.wikipedia.org/wiki/Violin_plot) on the right is a rotated version that makes it easier to perform the comparison because the densities (distributions) are not overlapping.
+
+A [box-and-whiskers chart](https://en.wikipedia.org/wiki/Box_plot) (also known as a *box plot*) allows you to visually compare the distributions by way of a [five number summary](https://en.wikipedia.org/wiki/Five-number_summary) which includes:
+
+- Sample minimum (the smallest value)
+- First [quartile](https://en.wikipedia.org/wiki/Quartile) (*Q<sub>1</sub>*) which is the 25th percentile
+- Second quartile (*Q<sub>2</sub>*) also known as the [*median*](https://en.wikipedia.org/wiki/Median)
+- Third quartile (*Q<sub>3</sub>*) which is the 75th percentile
+- Sample maximum (the largest value)
+
+```{r boxplot, fig.height=7, fig.width=7, out.width=624}
+five_number_summary <- iris %>%
+  group_by(1) %>%
+  summarize(
+    `Sample minimum` = min(Sepal.Length),
+    `1st quartile (25th percentile)` = quantile(Sepal.Length, 0.25),
+    `2nd quartile (median)` = median(Sepal.Length),
+    `3rd quartile (75th percentile)` = quantile(Sepal.Length, 0.75),
+    `Sample maximum` = max(Sepal.Length)
+  ) %>%
+  tidyr::gather(Summary, Sepal.Length, -1) %>%
+  select(-1)
+ggplot(data = iris, aes(y = Sepal.Length, x = 1)) +
+  geom_boxplot(color = "gray50") +
+  geom_point(data = five_number_summary, size = 9, shape = "←", position = position_nudge(x = 0.025)) +
+  geom_label(
+    data = five_number_summary,
+    aes(label = Summary, hjust = "left"),
+    nudge_x = 0.025, size = 5, label.padding = unit(0.5, "lines")
+  ) +
+  theme_minimal(14) +
+  labs(y = "Sepal length (cm)", title = "Box plot", x = NULL) +
+  theme(
+    panel.grid.major.y = element_line(linetype = "dashed", color = "gray80"),
+    panel.grid.minor.y = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    axis.text.x = element_blank()
+  )
+```
+
+My personal preference is when a violin plot and a box plot are combined so you still see the distribution in case there are multiple peaks -- or [*modes*](https://en.wikipedia.org/wiki/Mode_(statistics)) -- (something you can't see with a box plot) but you also see the summaries:
+
+```{r violin_box_combined, fig.cap='Notice how the box plot hides the three modes.'}
+temp <- iris %>%
+  mutate(Species = "all 3") %>%
+  rbind(iris)
+ggplot(data = temp, aes(y = Sepal.Length, x = Species)) +
+  geom_violin(fill = "gray80", color = NA, adjust = 0.5) +
+  geom_boxplot(width = 0.1) +
+  theme_minimal(14) +
+  labs(y = "Sepal length (cm)", title = "Violin and box")
+```
+
+### Multiple variables
+
+[Scatter plots](https://en.wikipedia.org/wiki/Scatter_plot) are the most popular and simplest way to investigate relationships between quantitative variables:
+
+```{r scatterplot, fig.cap='Shape and color of the points are determined by the species. Shapes are often used together with color to make the graphic better for colorblindness and grayscale printing.'}
+ggplot(data = iris, aes(x = Petal.Length, Sepal.Length)) +
+  geom_point(aes(color = Species, shape = Species)) +
+  scale_color_brewer(palette = "Set1") +
+  theme_minimal(14) +
+  labs(
+    x = "Petal length (cm)", y = "Sepal length (cm)",
+    title = "Scatter plot of relationship between petal & sepal lengths"
+  )
+```
+
+In fact, data scientists and analysts often use *scatterplot matrices* to look at many different relationships between pairs of variables simultaneously:
+
+```{r scatterplot_matrices, fig.height=10, fig.width=10, out.width=624}
+panel.hist <- function(x, ...)
+{
+  # Copied from ?pairs
+  usr <- par("usr"); on.exit(par(usr))
+  par(usr = c(usr[1:2], 0, 1.5) )
+  h <- hist(x, plot = FALSE, breaks = 20)
+  breaks <- h$breaks; nB <- length(breaks)
+  y <- h$counts; y <- y/max(y)
+  rect(breaks[-nB], 0, breaks[-1], y, col = "gray40", border = "black")
+}
+panel.ellipse <- function(x, y, ...) {
+  args <- list(...)
+  tmp <- split(data.frame(x = x, y = y), args$col)
+  for (color in names(tmp)) {
+    points(
+      tmp[[color]], pch = 16,
+      col = adjustcolor(color, alpha.f = 0.25)
+    )
+    mixtools::ellipse(
+      mu = colMeans(tmp[[color]]),
+      sigma = cov(tmp[[color]]),
+      alpha = 0.4, col = color,
+      newplot = FALSE, draw = TRUE
+    )
+  }
+}
+pairs(
+  iris[, 1:4],
+  col = RColorBrewer::brewer.pal(3, "Set1")[as.numeric(iris$Species)],
+  pch = 20, diag.panel = panel.hist, lower.panel = panel.ellipse,
+  main = "Scatterplot matrix of Iris flower measurements"
+)
+```
+
+At first glance there is **a lot** going on in that particular matrix, but really there are three main components that we can focus on just one at a time:
+
+1. the upper triangle panels have basic scatter plots with points colored according to species for each pair of variables,
+2. the diagonal panels have histograms of the individual variables, and
+3. the lower triangle panels are also scatterplots, but with ellipses tracing the two-dimensional densities (assuming [Normality](https://en.wikipedia.org/wiki/Multivariate_normal_distribution)).
+
+[Mosaic plots](https://en.wikipedia.org/wiki/Mosaic_plot) are used to visualize the relationships between two or more qualitative variables.
+
+## Other visualizations
+
+### Heat maps
+
+[Heatmaps](https://en.wikipedia.org/wiki/Heat_map)...
+
+### Tree maps
+
+[Treemapping](https://en.wikipedia.org/wiki/Treemapping) is a way to visualize hierarchical (nested) data as rectangles within other rectangles. It is not dissimilar to a mosaic plot!
+
+### Choropleths
+
+[Choropleths](https://en.wikipedia.org/wiki/Choropleth_map) are geographical maps that are colored and/or shaded according to some variable such as population density.
+
+## Scales and transformed data
+
+Sometimes the author of the visualization has chosen to apply a [transformation to the data](https://en.wikipedia.org/wiki/Data_transformation_(statistics)) because the data is [skewed](https://en.wikipedia.org/wiki/Skewness). It is important to watch out for these, especially [logarithmic scales](https://en.wikipedia.org/wiki/Logarithmic_scale).
+
+```{r transformed_scatterplot, fig.width=12, fig.height=12, out.width=624, out.height=624}
+set.seed(0)
+x <- sample(1:100, 500, replace = TRUE)
+slope <- 0.01; intercept <- runif(1, 0, 1); err.std <- runif(1, 0.01, 0.1)
+noise <- rnorm(length(x), 0, sd = err.std)
+y <- intercept + slope * x + noise
+df <- data.frame(x = x, y = 10 ^ y)
+p1 <- ggplot(df, aes(x = y)) + geom_histogram(aes(y = ..density..), fill = "gray70") + geom_density(adjust = 2) + theme_minimal(14) + ggtitle("Distribution of y is right skewed")
+p2 <- ggplot(df, aes(x = log10(y))) + geom_histogram(aes(y = ..density..), fill = "gray70") + geom_density(adjust = 2) + theme_minimal(14) + ggtitle("Transformed y is more Normally distributed")
+p3 <- ggplot(df, aes(x = x, y = y)) + geom_point() + ggtitle("Not a linear relationship between x and y") + theme_minimal(14) + geom_smooth(se = FALSE, method = "lm", size = 2)
+p4 <- ggplot(df, aes(x = x, y = log10(y))) + geom_point() + ggtitle("Linear relationship between x and transformed y") + theme_minimal(14) + geom_smooth(se = FALSE, method = "lm", size = 2)
+cowplot::plot_grid(plotlist = list(p1, p2, p3, p4))
+```
+
+It is possible (but rare) to encounter logarithmically scaled time axes, which are helpful when you have long tails caused by outliers:
+
+```{r transformed_histogram, fig.width=12, fig.height=6, out.width=624}
+logtime_breaks <- c(1, 5, 30, 60, 60*5, 60*10, 60*30, 60*60, 60*60*24)
+logtime_labels <- function(breaks) {
+  lbls <- breaks %>%
+    round %>%
+    lubridate::seconds_to_period() %>%
+    tolower %>%
+    gsub(" ", "", .) %>%
+    sub("(.*[a-z])0s$", "\\1", .) %>%
+    sub("(.*[a-z])0m$", "\\1", .) %>%
+    sub("(.*[a-z])0h$", "\\1", .)
+  return(lbls)
+}
+scale_x_logtime <- function(...) {
+  scale_x_log10(..., breaks = logtime_breaks, labels = logtime_labels)
+}
+set.seed(0)
+sessions <- data.frame(length = 10 ^ abs(rnorm(100, 0, 2)))
+p1 <- ggplot(sessions, aes(x = length)) +
+  geom_histogram() +
+  scale_x_continuous(
+    name = "Session length",
+    breaks = 3600 * seq(0, 24, 4),
+    labels = logtime_labels
+  ) +
+  ggtitle("Histogram of session length", "Not very useful") +
+  theme_minimal(14)
+p2 <- ggplot(sessions, aes(x = length)) +
+  geom_histogram() +
+  scale_x_logtime(name = "Session length") +
+  ggtitle("Logarithmically scaled time axis", "Substantially more useful") +
+  theme_minimal(14)
+cowplot::plot_grid(p1, p2)
+```
 
 ## Assessment
 
@@ -62,30 +409,28 @@ quiz(
 )
 ```
 
-## Examples
+## Appendix
 
-### Storytelling
+### Visual essays
 
 - [A visual introduction to machine learning](http://www.r2d3.us/visual-intro-to-machine-learning-part-1/) by Stephanie Yee and Tony Chu
-- [Exploring Histograms](https://tinlizzie.org/histograms/), an essay by Aran Lunzer and Amelia McNamara
+- [Exploring Histograms](https://tinlizzie.org/histograms/) by Aran Lunzer and Amelia McNamara
 - [Algorithms Tour](http://algorithms-tour.stitchfix.com/): How data science is woven into the fabric of StitchFix
 - [An Interactive Visualization of Every Line in Hamilton](https://pudding.cool/2017/03/hamilton/index.html) by Shirley Wu
 - [Constructed Career Paths from Job Switching Data](http://flowingdata.com/2017/11/28/career-paths/) by Nathan Yau
 
-### Showcases
+### Collections
 
 - [The New York Times Graphics Department](https://twitter.com/nytgraphics)
 - [Information is Beautiful Awards](https://www.informationisbeautifulawards.com/)
 - [FlowingData](http://flowingdata.com/)'s [10 Best Data Visualization Projects of 2017](https://flowingdata.com/2017/12/28/10-best-data-visualization-projects-of-2017/)
 
-## Resources
-
-### Further Reading
+### Further reading
 
 - [The Visual Display of Quantitative Information](https://www.edwardtufte.com/tufte/books_vdqi) by Edward Tufte
 - [Handbook of Data Visualization](http://www.springer.com/us/book/9783540330363)
 
-### Making Your Own
+### Making your own
 
 - [Visualize This: The FlowingData Guide to Design, Visualization, and Statistics](http://book.flowingdata.com/) by Nathan Yau
 - [R Graphics Cookbook](http://shop.oreilly.com/product/0636920063704.do) by Winston Chang
