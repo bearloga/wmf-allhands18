@@ -93,14 +93,32 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <div id="section-types-of-variables" class="section level3">
 <h3>Types of variables</h3>
 <ul>
-<li><em>Continuous</em> variables have an infinite range of possible values</li>
+<li><a href="https://en.wikipedia.org/wiki/Likert_scale"><em>Quantitative</em> variables</a> have a numeric value and/or an ordering
+<ul>
+<li><em>Continuous</em> variables have an infinite range of possible values
+<ul>
 <li><strong>Examples</strong>: time, age, weight, lengths (height, distance, time spent online), drug dosage</li>
-<li><em>Categorical</em> / <em>discrete</em> / <em>qualitative</em>:</li>
-<li><em>Nominal</em> variables have two or more categories that do not have an intrinsic order</li>
+</ul></li>
+<li>Quantitative variables that have limited possible values are <em>discrete</em>
+<ul>
+<li><strong>Examples</strong>: population size, number of times an event occurred, pageviews, number of questions a student got correct on a test</li>
+</ul></li>
+<li>Continuous variables are sometimes discretized by rounding if precision is not necessary</li>
+</ul></li>
+<li><a href="https://en.wikipedia.org/wiki/Categorical_variable"><em>Categorical</em></a> / <em>discrete</em> / <em>qualitative</em> variables have a limited number of possible values:
+<ul>
+<li><em>Nominal</em> variables have two or more categories that do not have an intrinsic order
+<ul>
 <li><strong>Examples</strong>: gender, ethnicity, controls vs test group, operating system</li>
-<li><em>Ordinal</em> variables are like nominal, but the categories have an ordering/ranking</li>
-<li><strong>Examples</strong>: Likert (rating) scale, number of visits to a website</li>
+</ul></li>
+<li><em>Ordinal</em> variables are like nominal, but the categories have an ordering/ranking such as the <a href="https://en.wikipedia.org/wiki/Likert_scale">Likert rating scale</a></li>
+<li>Categorical variables can also be created from quantitative variables
+<ul>
+<li><strong>Example</strong>: survey takers are often combined into age groups such as “18-24”</li>
+</ul></li>
+</ul></li>
 </ul>
+<p>Refer to <a href="https://en.wikipedia.org/wiki/Level_of_measurement">levels of measurement</a> for more information.</p>
 </div>
 <div id="section-things-to-look-for" class="section level3">
 <h3>Things to look for</h3>
@@ -109,8 +127,10 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <li>Axis labels (almost all plots should have this)</li>
 <li>How many variables and their types</li>
 <li>Including ones used to dictate colors, shapes, patterns, sizes, opacities, etc.</li>
-<li>Independent (“<em>predictor</em>”) variables (e.g. time) are usually on the X (horizontal) axis</li>
+<li>Independent (“<em>predictor</em>”) variables (e.g. time) are usually on the X (horizontal) axis
+<ul>
 <li>Occasionally time is plotted on the vertical axis for specific reasons</li>
+</ul></li>
 <li>Dependent (“<em>outcome</em>” / “<em>response</em>”) variables are usually on the Y (vertical) axis</li>
 <li>Scales (especially log-transformed ones)</li>
 </ul>
@@ -233,10 +253,10 @@ You may notice that the linear scale and the difference in magnitude makes it di
 <h3>Choropleths</h3>
 <p><a href="https://en.wikipedia.org/wiki/Choropleth_map">Choropleths</a> are geographical maps that are colored and/or shaded according to some variable such as population density.</p>
 </div>
-</div>
-<div id="section-networks-and-graphs" class="section level2">
-<h2>Networks and graphs</h2>
+<div id="section-networks-and-graphs" class="section level3">
+<h3>Networks and graphs</h3>
 <p><a href="https://en.wikipedia.org/wiki/Graph_drawing">Network diagrams</a> – not to be confused with <em>bar graphs</em> (what some people call bar charts) – are for visualizing <a href="https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)">graphs</a> (from <a href="https://en.wikipedia.org/wiki/Graph_theory">graph theory</a>) and networks (from <a href="https://en.wikipedia.org/wiki/Network_theory">network theory</a>) where there are <a href="https://en.wikipedia.org/wiki/Node_(computer_science)"><em>nodes</em></a> (<a href="https://en.wikipedia.org/wiki/Vertex_(graph_theory)"><em>vertices</em></a>) connected by <em>links</em> (<a href="https://en.wikipedia.org/wiki/Edge_(graph_theory)"><em>edges</em></a>)…</p>
+</div>
 </div>
 <div id="section-scales-and-transformed-data" class="section level2">
 <h2>Scales and transformed data</h2>
@@ -342,7 +362,7 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::register_http_handlers(session, metadata = list(id = "org.wikimedia.mikhail.dataviz-literacy", version = "0.1.9000"))
+learnr:::register_http_handlers(session, metadata = list(id = "org.wikimedia.mikhail.dataviz-literacy", version = "0.2.9000"))
 </script>
  
 <script type="application/shiny-prerendered" data-context="data">

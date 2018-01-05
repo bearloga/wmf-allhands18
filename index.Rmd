@@ -3,7 +3,7 @@ title: "Plotting the Course Through Charted Waters"
 output: learnr::tutorial
 tutorial:
   id: "org.wikimedia.mikhail.dataviz-literacy"
-  version: 0.1.9000
+  version: 0.2.9000
 runtime: shiny_prerendered
 ---
 
@@ -48,13 +48,20 @@ Graphical displays should:
 
 ### Types of variables
 
-- *Continuous* variables have an infinite range of possible values
-- **Examples**: time, age, weight, lengths (height, distance, time spent online), drug dosage
-- *Categorical* / *discrete* / *qualitative*:
-- *Nominal* variables have two or more categories that do not have an intrinsic order
-- **Examples**: gender, ethnicity, controls vs test group, operating system
-- *Ordinal* variables are like nominal, but the categories have an ordering/ranking
-- **Examples**: Likert (rating) scale, number of visits to a website
+- [*Quantitative* variables](https://en.wikipedia.org/wiki/Likert_scale) have a numeric value and/or an ordering
+  - *Continuous* variables have an infinite range of possible values
+    - **Examples**: time, age, weight, lengths (height, distance, time spent online), drug dosage
+  - Quantitative variables that have limited possible values are *discrete*
+    - **Examples**: population size, number of times an event occurred, pageviews, number of questions a student got correct on a test
+  - Continuous variables are sometimes discretized by rounding if precision is not necessary
+- [*Categorical*](https://en.wikipedia.org/wiki/Categorical_variable) / *discrete* / *qualitative* variables have a limited number of possible values:
+  - *Nominal* variables have two or more categories that do not have an intrinsic order
+    - **Examples**: gender, ethnicity, controls vs test group, operating system
+  - *Ordinal* variables are like nominal, but the categories have an ordering/ranking such as the [Likert rating scale](https://en.wikipedia.org/wiki/Likert_scale)
+  - Categorical variables can also be created from quantitative variables
+    - **Example**: survey takers are often combined into age groups such as "18-24"
+
+Refer to [levels of measurement](https://en.wikipedia.org/wiki/Level_of_measurement) for more information.
 
 ### Things to look for
 
@@ -63,7 +70,7 @@ Graphical displays should:
 - How many variables and their types
 - Including ones used to dictate colors, shapes, patterns, sizes, opacities, etc.
 - Independent ("*predictor*") variables (e.g. time) are usually on the X (horizontal) axis
-- Occasionally time is plotted on the vertical axis for specific reasons
+  - Occasionally time is plotted on the vertical axis for specific reasons
 - Dependent ("*outcome*" / "*response*") variables are usually on the Y (vertical) axis
 - Scales (especially log-transformed ones)
 
@@ -340,7 +347,7 @@ ggplot(pvs, aes(x = date, y = views / 1e6, color = language)) +
 
 [Choropleths](https://en.wikipedia.org/wiki/Choropleth_map) are geographical maps that are colored and/or shaded according to some variable such as population density.
 
-## Networks and graphs
+### Networks and graphs
 
 [Network diagrams](https://en.wikipedia.org/wiki/Graph_drawing) -- not to be confused with *bar graphs* (what some people call bar charts) -- are for visualizing [graphs](https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)) (from [graph theory](https://en.wikipedia.org/wiki/Graph_theory)) and networks (from [network theory](https://en.wikipedia.org/wiki/Network_theory)) where there are [*nodes*](https://en.wikipedia.org/wiki/Node_(computer_science)) ([*vertices*](https://en.wikipedia.org/wiki/Vertex_(graph_theory))) connected by *links* ([*edges*](https://en.wikipedia.org/wiki/Edge_(graph_theory)))...
 
