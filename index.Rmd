@@ -303,7 +303,30 @@ At first glance there is **a lot** going on in that particular matrix, but reall
 
 [Mosaic plots](https://en.wikipedia.org/wiki/Mosaic_plot) are used to visualize the relationships between two or more qualitative variables.
 
+[Line charts](https://en.wikipedia.org/wiki/Line_chart) are the most common way to visualize [time series](https://en.wikipedia.org/wiki/Time_series) data, with time **usually** as the horizontal X axis and values as the vertical Y axis:
+
+```{r pageviews, cache=TRUE}
+enwiki_pvs <- pageviews::project_pageviews(end = Sys.Date() - 1)
+frwiki_pvs <- pageviews::project_pageviews(project = "fr.wikipedia", end = Sys.Date() - 1)
+pvs <- rbind(enwiki_pvs, frwiki_pvs)
+pvs$language <- factor(pvs$language, c("en", "fr"), c("English", "French"))
+```
+```{r tsplot, fig.cap='You may notice that the linear scale and the difference in magnitude makes it difficult to notice patterns for French Wikipedia. Perhaps this chart can be improved later in the workshop?'}
+ggplot(pvs, aes(x = date, y = views / 1e6, color = language)) +
+  geom_line() +
+  scale_color_brewer("Language", palette = "Set1") +
+  scale_x_datetime(date_breaks = "4 months", date_labels = "%b '%y") +
+  labs(
+    x = "Date", y = "Pageviews (millions)",
+    title = "French & English Wikipedia daily pageviews",
+    subtitle = "All platforms, all agent types"
+  ) +
+  theme_minimal(14)
+```
+
 ## Other visualizations
+
+### Stacked area plots
 
 ### Heat maps
 
@@ -316,6 +339,10 @@ At first glance there is **a lot** going on in that particular matrix, but reall
 ### Choropleths
 
 [Choropleths](https://en.wikipedia.org/wiki/Choropleth_map) are geographical maps that are colored and/or shaded according to some variable such as population density.
+
+## Networks and graphs
+
+[Network diagrams](https://en.wikipedia.org/wiki/Graph_drawing) -- not to be confused with *bar graphs* (what some people call bar charts) -- are for visualizing [graphs](https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)) (from [graph theory](https://en.wikipedia.org/wiki/Graph_theory)) and networks (from [network theory](https://en.wikipedia.org/wiki/Network_theory)) where there are [*nodes*](https://en.wikipedia.org/wiki/Node_(computer_science)) ([*vertices*](https://en.wikipedia.org/wiki/Vertex_(graph_theory))) connected by *links* ([*edges*](https://en.wikipedia.org/wiki/Edge_(graph_theory)))...
 
 ## Scales and transformed data
 
@@ -333,6 +360,21 @@ p2 <- ggplot(df, aes(x = log10(y))) + geom_histogram(aes(y = ..density..), fill 
 p3 <- ggplot(df, aes(x = x, y = y)) + geom_point() + ggtitle("Not a linear relationship between x and y") + theme_minimal(14) + geom_smooth(se = FALSE, method = "lm", size = 2)
 p4 <- ggplot(df, aes(x = x, y = log10(y))) + geom_point() + ggtitle("Linear relationship between x and transformed y") + theme_minimal(14) + geom_smooth(se = FALSE, method = "lm", size = 2)
 cowplot::plot_grid(plotlist = list(p1, p2, p3, p4))
+```
+
+Let us revisit the pageviews data from earlier by utilizing the logarithmic axis:
+
+```{r tsplot_log10, fig.cap='Notice how the French Wikipedia pageviews are no longer dampened by English Wikipedia pageviews\' magnitude.'}
+ggplot(pvs, aes(x = date, y = views / 1e6, color = language)) +
+  geom_line() +
+  scale_y_log10("Pageviews (millions)") +
+  scale_color_brewer("Language", palette = "Set1") +
+  scale_x_datetime(date_breaks = "4 months", date_labels = "%b '%y") +
+  labs(
+    x = "Date", title = "French & English Wikipedia daily pageviews",
+    subtitle = "All platforms, all agent types"
+  ) +
+  theme_minimal(14)
 ```
 
 It is possible (but rare) to encounter logarithmically scaled time axes, which are helpful when you have long tails caused by outliers:

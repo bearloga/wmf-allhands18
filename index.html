@@ -207,10 +207,20 @@ Shape and color of the points are determined by the species. Shapes are often us
 <li>the lower triangle panels are also scatterplots, but with ellipses tracing the two-dimensional densities (assuming <a href="https://en.wikipedia.org/wiki/Multivariate_normal_distribution">Normality</a>).</li>
 </ol>
 <p><a href="https://en.wikipedia.org/wiki/Mosaic_plot">Mosaic plots</a> are used to visualize the relationships between two or more qualitative variables.</p>
+<p><a href="https://en.wikipedia.org/wiki/Line_chart">Line charts</a> are the most common way to visualize <a href="https://en.wikipedia.org/wiki/Time_series">time series</a> data, with time <strong>usually</strong> as the horizontal X axis and values as the vertical Y axis:</p>
+<div class="figure">
+<img src="index_files/figure-html4/tsplot-1.png" alt="You may notice that the linear scale and the difference in magnitude makes it difficult to notice patterns for French Wikipedia. Perhaps this chart can be improved later in the workshop?" width="624" />
+<p class="caption">
+You may notice that the linear scale and the difference in magnitude makes it difficult to notice patterns for French Wikipedia. Perhaps this chart can be improved later in the workshop?
+</p>
+</div>
 </div>
 </div>
 <div id="section-other-visualizations" class="section level2">
 <h2>Other visualizations</h2>
+<div id="section-stacked-area-plots" class="section level3">
+<h3>Stacked area plots</h3>
+</div>
 <div id="section-heat-maps" class="section level3">
 <h3>Heat maps</h3>
 <p><a href="https://en.wikipedia.org/wiki/Heat_map">Heatmaps</a>…</p>
@@ -224,10 +234,21 @@ Shape and color of the points are determined by the species. Shapes are often us
 <p><a href="https://en.wikipedia.org/wiki/Choropleth_map">Choropleths</a> are geographical maps that are colored and/or shaded according to some variable such as population density.</p>
 </div>
 </div>
+<div id="section-networks-and-graphs" class="section level2">
+<h2>Networks and graphs</h2>
+<p><a href="https://en.wikipedia.org/wiki/Graph_drawing">Network diagrams</a> – not to be confused with <em>bar graphs</em> (what some people call bar charts) – are for visualizing <a href="https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)">graphs</a> (from <a href="https://en.wikipedia.org/wiki/Graph_theory">graph theory</a>) and networks (from <a href="https://en.wikipedia.org/wiki/Network_theory">network theory</a>) where there are <a href="https://en.wikipedia.org/wiki/Node_(computer_science)"><em>nodes</em></a> (<a href="https://en.wikipedia.org/wiki/Vertex_(graph_theory)"><em>vertices</em></a>) connected by <em>links</em> (<a href="https://en.wikipedia.org/wiki/Edge_(graph_theory)"><em>edges</em></a>)…</p>
+</div>
 <div id="section-scales-and-transformed-data" class="section level2">
 <h2>Scales and transformed data</h2>
 <p>Sometimes the author of the visualization has chosen to apply a <a href="https://en.wikipedia.org/wiki/Data_transformation_(statistics)">transformation to the data</a> because the data is <a href="https://en.wikipedia.org/wiki/Skewness">skewed</a>. It is important to watch out for these, especially <a href="https://en.wikipedia.org/wiki/Logarithmic_scale">logarithmic scales</a>.</p>
 <p><img src="index_files/figure-html4/transformed_scatterplot-1.png" width="624" height="624" /></p>
+<p>Let us revisit the pageviews data from earlier by utilizing the logarithmic axis:</p>
+<div class="figure">
+<img src="index_files/figure-html4/tsplot_log10-1.png" alt="Notice how the French Wikipedia pageviews are no longer dampened by English Wikipedia pageviews' magnitude." width="624" />
+<p class="caption">
+Notice how the French Wikipedia pageviews are no longer dampened by English Wikipedia pageviews’ magnitude.
+</p>
+</div>
 <p>It is possible (but rare) to encounter logarithmically scaled time axes, which are helpful when you have long tails caused by outliers:</p>
 <p><img src="index_files/figure-html4/transformed_histogram-1.png" width="624" /></p>
 </div>
