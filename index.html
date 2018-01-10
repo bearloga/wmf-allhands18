@@ -179,7 +179,7 @@ Notice how the use of color allows us to compare survivorship within classes.
 </tr>
 </tbody>
 </table>
-<p>In the past decade, an alternative to the pie chart called <em>waffle charts</em> (or “square pie charts”) has gained popularity at representing relative sizes between groups. (See See <a href="https://eagereyes.org/techniques/square-pie-charts">Women in IT – Squaring the Pie?</a>.) For example, it is much easier to visually compare 11 squares (2nd class passengers who survived) to 20 squares (1st class passengers who survived) than 1 slice to another slice that is 1.8 times bigger:</p>
+<p>In the past decade, an alternative to the pie chart called <em>waffle charts</em> (or “square pie charts”) has gained popularity at representing relative sizes between groups. (See <a href="https://eagereyes.org/techniques/square-pie-charts">Women in IT – Squaring the Pie?</a>.) Each square represents a certain number of units, which makes it much easier to visually compare sizes of groups. For example, it is easy to compare 11 squares (2nd class passengers who survived) to 20 squares (1st class passengers who survived) than 1 pie slice to another pie slice that is 1.8 times bigger:</p>
 <p><img src="index_files/figure-html4/waffle-1.png" width="624" /></p>
 </div>
 <div id="section-histograms-and-densities" class="section level3">
@@ -211,23 +211,27 @@ Notice how the box plot hides the three modes.
 </div>
 <div id="section-multiple-variables" class="section level3">
 <h3>Multiple variables</h3>
-<p><a href="https://en.wikipedia.org/wiki/Scatter_plot">Scatter plots</a> are the most popular and simplest way to investigate relationships between quantitative variables:</p>
+<p><a href="https://en.wikipedia.org/wiki/Scatter_plot">Scatter plots</a> are the most popular and simplest way to investigate relationships between quantitative variables. You have one variable on the X axis and one variable on the Y axis. Each point represents a single unit from your dataset (e.g. a subject of an experiment):</p>
 <div class="figure">
 <img src="index_files/figure-html4/scatterplot-1.png" alt="Shape and color of the points are determined by the species. Shapes are often used together with color to make the graphic better for colorblindness and grayscale printing." width="624" />
 <p class="caption">
 Shape and color of the points are determined by the species. Shapes are often used together with color to make the graphic better for colorblindness and grayscale printing.
 </p>
 </div>
-<p>In fact, data scientists and analysts often use <em>scatterplot matrices</em> to look at many different relationships between pairs of variables simultaneously:</p>
-<p><img src="index_files/figure-html4/scatterplot_matrices-1.png" width="624" /></p>
+<p>Data scientists and analysts often use <em>scatterplot matrices</em> to look at many different relationships between pairs of variables simultaneously:</p>
+<div class="figure">
+<img src="index_files/figure-html4/scatterplot_matrices-1.png" alt="These are usually not present in final drafts of reports and are instead used as tools during the exploratory data analysis step." width="624" />
+<p class="caption">
+These are usually not present in final drafts of reports and are instead used as tools during the exploratory data analysis step.
+</p>
+</div>
 <p>At first glance there is <strong>a lot</strong> going on in that particular matrix, but really there are three main components that we can focus on just one at a time:</p>
 <ol style="list-style-type: decimal">
 <li>the upper triangle panels have basic scatter plots with points colored according to species for each pair of variables,</li>
 <li>the diagonal panels have histograms of the individual variables, and</li>
 <li>the lower triangle panels are also scatterplots, but with ellipses tracing the two-dimensional densities (assuming <a href="https://en.wikipedia.org/wiki/Multivariate_normal_distribution">Normality</a>).</li>
 </ol>
-<p><a href="https://en.wikipedia.org/wiki/Mosaic_plot">Mosaic plots</a> are used to visualize the relationships between two or more qualitative variables.</p>
-<p><a href="https://en.wikipedia.org/wiki/Line_chart">Line charts</a> are the most common way to visualize <a href="https://en.wikipedia.org/wiki/Time_series">time series</a> data, with time <strong>usually</strong> as the horizontal X axis and values as the vertical Y axis:</p>
+<p><a href="https://en.wikipedia.org/wiki/Line_chart">Line charts</a> are the most common way to visualize <a href="https://en.wikipedia.org/wiki/Time_series">time series</a> data, with time <strong>usually</strong> as the horizontal X axis and range of a quantitative variable as the vertical Y axis:</p>
 <div class="figure">
 <img src="index_files/figure-html4/tsplot-1.png" alt="You may notice that the linear scale and the difference in magnitude makes it difficult to notice patterns for French Wikipedia. Perhaps this chart can be improved later in the workshop?" width="624" />
 <p class="caption">
@@ -238,8 +242,31 @@ You may notice that the linear scale and the difference in magnitude makes it di
 </div>
 <div id="section-other-visualizations" class="section level2">
 <h2>Other visualizations</h2>
+<div id="section-mosaic-plots" class="section level3">
+<h3>Mosaic plots</h3>
+<p><a href="https://en.wikipedia.org/wiki/Mosaic_plot">Mosaic plots</a> are used to visualize the relationships between two or more qualitative variables, and they are incredibly rare. While they are very useful once you learn how to read them, that step can be very difficult and so it is unsurprising that they don’t show up more. They’re often used by statisticians during exploratory data analysis to perform a visual check before performing a statistical test of independence.</p>
+<p>We will use these to examine distribution of hair and eye colors in ~600 statistics students at University of Delaware reported by Snee, R. D. in <em>The American Statistician</em> journal in 1974:</p>
+<p><img src="index_files/figure-html4/mosaic1-1.png" width="624" /></p>
+<p>We can extend a mosaic plot to include <a href="https://en.wikipedia.org/wiki/Studentized_residual"><em>standardized residuals</em></a> (from a <a href="https://en.wikipedia.org/wiki/Log-linear_model">log-linear model</a>). Cells representing <span style="color:red;font-weight:bold;">negative residuals</span> – meaning there are <span style="color:red;font-weight:bold;">fewer observations than would have been expected under independence</span> – are drawn as <span style="color:red;font-weight:bold;">red</span> with broken borders; <span style="color:blue;font-weight:bold;">positive residuals</span> – meaning <span style="color:blue;font-weight:bold;">more observations than would be expected</span> – are drawn in <span style="color:blue;font-weight:bold;">blue</span> with solid borders.</p>
+<p><img src="index_files/figure-html4/mosaic2-1.png" width="624" /></p>
+<p>We can also look at the proportions across all three variables:</p>
+<p><img src="index_files/figure-html4/mosaic3-1.png" width="624" /></p>
+<p>What the third mosaic plot tells us:</p>
+<ul>
+<li>Blond was the most prevalent hair color among those with blue eyes.</li>
+<li>More brown-haired men had blue eyes than brown-haired women.</li>
+<li>More blond-haired women had blue eyes than blonde-haired men.</li>
+</ul>
+</div>
 <div id="section-stacked-area-plots" class="section level3">
 <h3>Stacked area plots</h3>
+<p>A <em>stacked area plot</em> is a way to visualize multiple amounts/proportions changes over time.</p>
+<div class="figure">
+<img src="index_files/figure-html4/stacked_area-1.png" alt="Beginning with 1925, the number of people over the age of 64 has increased dramatically, especially after 1975." width="624" />
+<p class="caption">
+Beginning with 1925, the number of people over the age of 64 has increased dramatically, especially after 1975.
+</p>
+</div>
 </div>
 <div id="section-heat-maps" class="section level3">
 <h3>Heat maps</h3>
@@ -370,6 +397,11 @@ library(magrittr)
 library(dplyr)
 library(ggplot2)
 titanic <- data.frame(Titanic)
+compress <- function(x, round_by = 2) {
+  div <- findInterval(x, c(1, 1e3, 1e6, 1e9, 1e12))
+  return(paste0(round( x / 10 ^ (3 * ifelse(div - 1 < 0, 0, div - 1)), round_by),
+                c("", "", "K", "M", "B", "T")[div + 1]))
+}
 </script>
  <!--html_preserve-->
 <script type="application/shiny-prerendered" data-context="dependencies">

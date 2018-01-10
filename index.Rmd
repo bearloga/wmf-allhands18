@@ -16,6 +16,11 @@ library(magrittr)
 library(dplyr)
 library(ggplot2)
 titanic <- data.frame(Titanic)
+compress <- function(x, round_by = 2) {
+  div <- findInterval(x, c(1, 1e3, 1e6, 1e9, 1e12))
+  return(paste0(round( x / 10 ^ (3 * ifelse(div - 1 < 0, 0, div - 1)), round_by),
+                c("", "", "K", "M", "B", "T")[div + 1]))
+}
 ```
 
 ## Introduction
@@ -121,7 +126,7 @@ class_survival %>%
   knitr::kable(format = "markdown")
 ```
 
-In the past decade, an alternative to the pie chart called *waffle charts* (or "square pie charts") has gained popularity at representing relative sizes between groups. (See See [Women in IT – Squaring the Pie?](https://eagereyes.org/techniques/square-pie-charts).) For example, it is much easier to visually compare 11 squares (2nd class passengers who survived) to 20 squares (1st class passengers who survived) than 1 slice to another slice that is 1.8 times bigger:
+In the past decade, an alternative to the pie chart called *waffle charts* (or "square pie charts") has gained popularity at representing relative sizes between groups. (See [Women in IT – Squaring the Pie?](https://eagereyes.org/techniques/square-pie-charts).) Each square represents a certain number of units, which makes it much easier to visually compare sizes of groups. For example, it is easy to compare 11 squares (2nd class passengers who survived) to 20 squares (1st class passengers who survived) than 1 pie slice to another pie slice that is 1.8 times bigger:
 
 ```{r waffle, fig.width=12, fig.height=6, out.width=624}
 temp <- split(class_survival, class_survival$Survived) %>%
@@ -252,7 +257,7 @@ ggplot(data = temp, aes(y = Sepal.Length, x = Species)) +
 
 ### Multiple variables
 
-[Scatter plots](https://en.wikipedia.org/wiki/Scatter_plot) are the most popular and simplest way to investigate relationships between quantitative variables:
+[Scatter plots](https://en.wikipedia.org/wiki/Scatter_plot) are the most popular and simplest way to investigate relationships between quantitative variables. You have one variable on the X axis and one variable on the Y axis. Each point represents a single unit from your dataset (e.g. a subject of an experiment):
 
 ```{r scatterplot, fig.cap='Shape and color of the points are determined by the species. Shapes are often used together with color to make the graphic better for colorblindness and grayscale printing.'}
 ggplot(data = iris, aes(x = Petal.Length, Sepal.Length)) +
@@ -265,9 +270,9 @@ ggplot(data = iris, aes(x = Petal.Length, Sepal.Length)) +
   )
 ```
 
-In fact, data scientists and analysts often use *scatterplot matrices* to look at many different relationships between pairs of variables simultaneously:
+Data scientists and analysts often use *scatterplot matrices* to look at many different relationships between pairs of variables simultaneously:
 
-```{r scatterplot_matrices, fig.height=10, fig.width=10, out.width=624}
+```{r scatterplot_matrices, fig.height=10, fig.width=10, out.width=624, fig.cap='These are usually not present in final drafts of reports and are instead used as tools during the exploratory data analysis step.'}
 panel.hist <- function(x, ...)
 {
   # Copied from ?pairs
@@ -308,9 +313,7 @@ At first glance there is **a lot** going on in that particular matrix, but reall
 2. the diagonal panels have histograms of the individual variables, and
 3. the lower triangle panels are also scatterplots, but with ellipses tracing the two-dimensional densities (assuming [Normality](https://en.wikipedia.org/wiki/Multivariate_normal_distribution)).
 
-[Mosaic plots](https://en.wikipedia.org/wiki/Mosaic_plot) are used to visualize the relationships between two or more qualitative variables.
-
-[Line charts](https://en.wikipedia.org/wiki/Line_chart) are the most common way to visualize [time series](https://en.wikipedia.org/wiki/Time_series) data, with time **usually** as the horizontal X axis and values as the vertical Y axis:
+[Line charts](https://en.wikipedia.org/wiki/Line_chart) are the most common way to visualize [time series](https://en.wikipedia.org/wiki/Time_series) data, with time **usually** as the horizontal X axis and range of a quantitative variable as the vertical Y axis:
 
 ```{r pageviews, cache=TRUE}
 enwiki_pvs <- pageviews::project_pageviews(end = Sys.Date() - 1)
@@ -333,7 +336,88 @@ ggplot(pvs, aes(x = date, y = views / 1e6, color = language)) +
 
 ## Other visualizations
 
+### Mosaic plots
+
+[Mosaic plots](https://en.wikipedia.org/wiki/Mosaic_plot) are used to visualize the relationships between two or more qualitative variables, and they are incredibly rare. While they are very useful once you learn how to read them, that step can be very difficult and so it is unsurprising that they don't show up more. They're often used by statisticians during exploratory data analysis to perform a visual check before performing a statistical test of independence.
+
+We will use these to examine distribution of hair and eye colors in ~600 statistics students at University of Delaware reported by Snee, R. D. in *The American Statistician* journal in 1974:
+
+```{r mosaic1, fig.height=7, fig.width=9, out.width=624}
+mosaicplot(
+  t(margin.table(HairEyeColor, c(1, 3))),
+  color = c("black", "brown", "red", "yellow"),
+  main = "Mosaic Plot of Men and Women's Hair Colors"
+)
+rect(0.25, 0.5, 0.75, 0.7, col = "white", border = "black", lwd = 8)
+rect(0.25, 0.5, 0.75, 0.7, col = "white", border = "green", lwd = 4)
+text(0.5, 0.6, "Black hair color was more prevalent\nin men than women in this dataset.", cex = 1.1)
+rect(0.34, 0, 0.66, 0.10, col = "white", border = "black", lwd = 8)
+rect(0.34, 0, 0.66, 0.10, col = "white", border = "green", lwd = 4)
+text(0.5, 0.05, "Opposite for blond hair.", cex = 1.1)
+```
+
+We can extend a mosaic plot to include [*standardized residuals*](https://en.wikipedia.org/wiki/Studentized_residual) (from a [log-linear model](https://en.wikipedia.org/wiki/Log-linear_model)). Cells representing <span style='color:red;font-weight:bold;'>negative residuals</span> -- meaning there are <span style='color:red;font-weight:bold;'>fewer observations than would have been expected under independence</span> -- are drawn as <span style='color:red;font-weight:bold;'>red</span> with broken borders; <span style='color:blue;font-weight:bold;'>positive residuals</span> -- meaning <span style='color:blue;font-weight:bold;'>more observations than would be expected</span> -- are drawn in <span style='color:blue;font-weight:bold;'>blue</span> with solid borders.
+
+```{r mosaic2, fig.height=7, fig.width=9, out.width=624}
+mosaicplot(
+  margin.table(HairEyeColor, c(1, 2)), shade = TRUE,
+  main = "Shaded Mosaic Plot of Hair and Eye Colors"
+)
+text(0.35, 0.79, "← Way more black-haired\npeople with brown eyes\nthan expected given\noverall proportions\nof brown-eyed and\nblack-haired people.", cex = 1.1)
+highlight <- data.frame(
+  x = c(0.00, 0.15, 0.15, 0.535, 0.535, 0.645, 0.645, 0.824, 0.824, 0.645, 0.645, 0.535, 0.535, 0.15, 0.15, 0.00, 0.00),
+  y = c(0.025, 0.025, 0.075, 0.075, 0.165, 0.165, 0.095, 0.095, 0.19, 0.19, 0.37, 0.37, 0.27, 0.27, 0.16, 0.16, 0.025)
+)
+lines(x = highlight$x, y = highlight$y, col = "black", lwd = 8)
+lines(x = highlight$x, y = highlight$y, col = "green", lwd = 4)
+text(0.35, 0.175, "Less blond-haired people\nwith hazel-colored eyes\nthan we’d expect.", cex = 1.1)
+# axis(4, at = seq(0, 1, 0.05))
+# axis(1, at = seq(0, 1, 0.05))
+# xy <- expand.grid(x = seq(0, 1, 0.1), y = seq(0, 1, 0.1)); xy$l <- sprintf("(%.1f, %.1f)", xy$x, xy$y)
+# z <- xy[identify(xy$x, xy$y, xy$l), ]
+```
+
+We can also look at the proportions across all three variables:
+
+```{r mosaic3, fig.height=6, fig.width=8, out.width=624}
+mosaicplot(
+  HairEyeColor,
+  main = "Mosaic Plot of Hair and Eye Colors in Women and Men"
+)
+highlight <- data.frame(
+  x = c(0.00, 0.19, 0.19, 0.65, 0.65, 0.78, 0.78, 1.00, 1.00, 0.78, 0.78, 0.65, 0.65, 0.19, 0.19, 0.00, 0.00),
+  y = c(0.19, 0.19, 0.28, 0.28, 0.38, 0.38, 0.20, 0.20, 0.92, 0.92, 0.63, 0.63, 0.585, 0.585, 0.40, 0.40, 0.19)
+)
+lines(x = highlight$x, y = highlight$y, col = "black", lwd = 8)
+lines(x = highlight$x, y = highlight$y, col = "green", lwd = 4)
+```
+
+What the third mosaic plot tells us:
+
+- Blond was the most prevalent hair color among those with blue eyes.
+- More brown-haired men had blue eyes than brown-haired women.
+- More blond-haired women had blue eyes than blonde-haired men.
+
 ### Stacked area plots
+
+A *stacked area plot* is a way to visualize multiple amounts/proportions changes over time.
+
+```{r stacked_area, fig.height=6, fig.width=12, out.width=624, fig.cap='Beginning with 1925, the number of people over the age of 64 has increased dramatically, especially after 1975.'}
+library(gcookbook) # install.packages("gcookbook")
+p1 <- ggplot(uspopage, aes(y = Thousands, x = Year, fill = AgeGroup)) +
+  geom_area(color = "black") +
+  scale_y_continuous("Number of people in thousands", labels = compress) +
+  scale_fill_discrete("Age group", breaks = rev(levels(uspopage$AgeGroup))) +
+  ggtitle("Stacked areas", "Age distribution in the United States, 1900-2002") +
+  theme_minimal(14)
+p2 <- ggplot(uspopage, aes(y = Thousands, x = Year, fill = AgeGroup)) +
+  geom_area(color = "black", position = "fill") +
+  scale_y_continuous("Proportion", labels = scales::percent_format()) +
+  scale_fill_discrete("Age group", breaks = rev(levels(uspopage$AgeGroup))) +
+  ggtitle("Stacked proportions", "Age distribution in the United States, 1900-2002") +
+  theme_minimal(14)
+cowplot::plot_grid(p1, p2, nrow = 1)
+```
 
 ### Heat maps
 
