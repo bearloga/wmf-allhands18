@@ -421,19 +421,162 @@ cowplot::plot_grid(p1, p2, nrow = 1)
 
 ### Heat maps
 
-[Heatmaps](https://en.wikipedia.org/wiki/Heat_map)...
+[Heatmaps](https://en.wikipedia.org/wiki/Heat_map) are a graphical representation of matrices. For example, we can visualize the following dataset of top 50 NBA players' performance statistics from [the 2008-09 season]((https://en.wikipedia.org/wiki/2008%E2%80%9309_NBA_season)) (obtained from [RotoWire](https://www.rotowire.com/), formerly databaseBasketball):
+
+```{r nba_data, cache=TRUE}
+# https://learnr.wordpress.com/2010/01/26/ggplot2-quick-heatmap-plotting/
+nba <- read.csv("http://datasets.flowingdata.com/ppg2008.csv")
+nba$Name <- with(nba, reorder(Name, PTS))
+colnames(nba) <- c(
+  "Name", "Games", "Minutes", "Points",
+  "Field goals made", "Field goal attempts", "Field goal %",
+  "Free throws made", "Free throw attempts", "Free throw %",
+  "Three-pointers made", "Three-point attempts", "Three-point %",
+  "Offensive rebounds", "Defensive rebounds", "Total rebounds",
+  "Assists", "Steals", "Blocks", "Turnovers", "PF"
+)
+nba$PF <- NULL
+nba.m <- reshape2::melt(nba)
+nba.m <- plyr::ddply(nba.m, plyr::.(variable), transform, rescale = scale(value))
+```
+```{r }
+DT::datatable(
+  nba,
+  options = list(
+    order = list(1, "desc")
+  ),
+  class = "cell-border stripe",
+  rownames = FALSE, filter = "top"
+) %>%
+  DT::formatPercentage(c("Field goal %", "Free throw %", "Three-point %"))
+```
+```{r heatmap, fig.height=10, fig.width=8, out.width=624}
+ggplot(nba.m, aes(variable, Name)) +
+  geom_tile(aes(fill = rescale), color = "white") +
+  scale_fill_viridis_c(
+    "Compared to other 49 players",
+    breaks = c(-2, 0, 2, 4),
+    labels = function(x) {
+      return(factor(x, c(-2, 0, 2, 4), c("Worse", "Average", "Better", "Way better")))
+    }
+  ) +
+  theme_minimal(14) +
+  labs(
+    x = NULL, y = NULL,
+    title = "Heatmap of top 50 NBA scorers' performance",
+    subtitle = "Performance data from 2008-2009 season; centered and scaled",
+    caption = "Source: FlowingData and RotoWire (formerly databaseBasketball)"
+  ) +
+  scale_x_discrete(expand = c(0, 0)) +
+  scale_y_discrete(expand = c(0, 0)) +
+  theme(
+    legend.position = "bottom", # "none",
+    legend.key.width = unit(3,"line"),
+    axis.ticks = element_blank(),
+    axis.text.y = element_text(color = "black"),
+    axis.text.x = element_text(size = 14 * 0.8, angle = 330, hjust = 0, color = "black"),
+    plot.caption = element_text(size = 8)
+  )
+```
+
+Some observations:
+
+- [Dwight Howard](https://en.wikipedia.org/wiki/Dwight_Howard) was the best at blocking shots
+- Dwight Howard was also one of the worst at making free throws
+- [Yao Ming](https://en.wikipedia.org/wiki/Yao_Ming) was the best at making three-pointers (by % successful out of total attempts)
+
+```{r corr_map, fig.width=8, fig.height=6, out.width=624}
+nba_correlations <- cor(nba[, -1])
+abbreviations <- abbreviate(row.names(nba_correlations), minlength = 6)
+rownames(nba_correlations) <- colnames(nba_correlations) <- abbreviations
+correlation_plot <- GGally::ggcorr(data = NULL, cor_matrix = nba_correlations, nbreaks = 4, palette = "RdGy", label = TRUE, label_size = 3, label_color = "white", hjust = "right", size = 5, color = "grey50", layout.exp = 2) +
+  ggtitle("Heatmap of correlations", "between performance statistics")
+correlation_plot + theme_minimal(14)
+```
+
+Some observations:
+
+- **Negative correlations** (in <span style='font-weight:bold;color:#CA0020;'>red</span>):
+    - Players who made a higher percentage of field goals ("Fldgl.") stayed away from trying to make three-point shots ("Thr-pa" is "Three-point attempts").
+- **Positive correlations** (in <span style='font-weight:bold;color:#404040;'>grey</span>):
+    - Players who attempted/made more field goals ("Fldgla"/"Fldglm") also scored more points.
 
 ### Tree maps
 
-[Treemapping](https://en.wikipedia.org/wiki/Treemapping) is a way to visualize hierarchical (nested) data as rectangles within other rectangles. It is not dissimilar to a mosaic plot!
+[Treemapping](https://en.wikipedia.org/wiki/Treemapping) is a way to visualize hierarchical (nested) data as rectangles within other rectangles, with the area of the rectangle representing the proportion and sometimes a shade or color representing another variable. It is not dissimilar to a mosaic plot!
+
+```{r treemap, fig.cap='Almost all of the crew was male and almost 80% of them died. Most of the 3rd class passengers did not make it either, while more than 85% of women in 1st and 2nd classes survived.'}
+library(treemapify)
+titanic %>%
+  dplyr::mutate(Type = dplyr::case_when(
+    Sex == "Female" & Age == "Child" ~ "Girls",
+    Sex == "Male" & Age == "Child" ~ "Boys",
+    Sex == "Female" & Age == "Adult" ~ "Women",
+    Sex == "Male" & Age == "Adult" ~ "Men"
+  )) %>%
+  dplyr::group_by(Class, Type, Survived) %>%
+  dplyr::summarize(Freq = sum(Freq)) %>%
+  dplyr::summarize(Total = sum(Freq), Survival = Freq[Survived == "Yes"] / Total) %>%
+  dplyr::ungroup() %>%
+  dplyr::mutate(Label = sprintf("%s (%.1f%%)", Type, 100 * Survival)) %>%
+  ggplot(aes(area = Total, fill = Survival, label = Label, subgroup = Class)) +
+  geom_treemap() +
+  geom_treemap_subgroup_border(color = "white") +
+  geom_treemap_subgroup_text(
+    place = "centre", grow = TRUE, alpha = 0.5,
+    color = "black", fontface = "italic", min.size = 0
+  ) +
+  geom_treemap_text(colour = "white", place = "topleft", reflow = TRUE) +
+  scale_fill_continuous(labels = scales::percent_format(), breaks = seq(0, 1, 0.25)) +
+  labs(title = "Treemap of Titanic passengers' survival rates") +
+  theme_minimal(14)
+```
 
 ### Choropleths
 
 [Choropleths](https://en.wikipedia.org/wiki/Choropleth_map) are geographical maps that are colored and/or shaded according to some variable such as population density.
 
+```{r choropleth}
+data("USArrests", package = "datasets")
+data("fifty_states", package = "fiftystater")
+library(fiftystater); library(mapproj)
+crimes <- data.frame(state = tolower(rownames(USArrests)), USArrests) %>%
+  dplyr::left_join(data.frame(abb = state.abb, state = tolower(state.name)), by = "state")
+centroids <- fifty_states[, c("long", "lat")] %>%
+  split(fifty_states$id) %>%
+  lapply(as.matrix) %>%
+  lapply(geosphere::centroid) %>%
+  lapply(as.data.frame) %>%
+  dplyr::bind_rows(.id = "state")
+abbrvs <- crimes[, c("state", "abb")] %>%
+  dplyr::left_join(centroids, by = "state")
+ggplot(crimes, aes(map_id = state)) + 
+  geom_map(aes(fill = Murder), map = fifty_states, color = "white") + 
+  geom_text(data = abbrvs, aes(label = abb, x = lon, y = lat)) +
+  expand_limits(x = fifty_states$long, y = fifty_states$lat) +
+  coord_map() +
+  scale_fill_distiller(palette = "RdGy") +
+  scale_x_continuous(breaks = NULL) + 
+  scale_y_continuous(breaks = NULL) +
+  labs(
+    x = NULL, y = NULL, fill = "Murder arrests",
+    title = "Choropleth of 1973 crime rates by US state",
+    subtitle = "Arrest rates are per 100,000 residents",
+    caption = "Source: World Almanac and Book of facts, 1975"
+  ) +
+  theme_minimal(14) +
+  theme(
+    panel.background = element_blank()
+  )
+```
+
 ### Networks and graphs
 
-[Network diagrams](https://en.wikipedia.org/wiki/Graph_drawing) -- not to be confused with *bar graphs* (what some people call bar charts) -- are for visualizing [graphs](https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)) (from [graph theory](https://en.wikipedia.org/wiki/Graph_theory)) and networks (from [network theory](https://en.wikipedia.org/wiki/Network_theory)) where there are [*nodes*](https://en.wikipedia.org/wiki/Node_(computer_science)) ([*vertices*](https://en.wikipedia.org/wiki/Vertex_(graph_theory))) connected by *links* ([*edges*](https://en.wikipedia.org/wiki/Edge_(graph_theory)))...
+[Network diagrams](https://en.wikipedia.org/wiki/Graph_drawing) are for visualizing [graphs](https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)) (from [graph theory](https://en.wikipedia.org/wiki/Graph_theory)) and networks (from [network theory](https://en.wikipedia.org/wiki/Network_theory)) where there are [*nodes*](https://en.wikipedia.org/wiki/Node_(computer_science)) ([*vertices*](https://en.wikipedia.org/wiki/Vertex_(graph_theory))) connected by *links* ([*edges*](https://en.wikipedia.org/wiki/Edge_(graph_theory))). Their goal is to visually represent relationships between units. For example, using [the Wikipedia Clickstream data](https://meta.wikimedia.org/wiki/Research:Wikipedia_clickstream) from November 2017 we can start at the article on net neutrality and visualize a *neighborhood* of articles that are *adjacent* to the central one:
+
+<a title="By MPopov (WMF) (Own work) [CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0)], via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File%3ANet_neutrality_clickstream_(Nov_2017).png"><img width="512" alt="Net neutrality clickstream (Nov 2017)" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Net_neutrality_clickstream_%28Nov_2017%29.png/512px-Net_neutrality_clickstream_%28Nov_2017%29.png"/></a>
+
+The darkness of the edges connecting the vertices represents how many clicks there were between the pairs of articles. We can see that there are more clicks between "net neutrality" and "digital rights" than between "net neutrality" and "human rights", but way more clicks between "net neutrality" and "Wikipedia Zero".
 
 ## Scales and transformed data
 
@@ -505,6 +648,67 @@ p2 <- ggplot(sessions, aes(x = length)) +
 cowplot::plot_grid(p1, p2)
 ```
 
+## Group activity
+
+This can be done in pairs or individually. You have 5 minutes to pick one of the following 3 visualizations, note 2-3 interesting observations from your pick, and share those insights with your neighbors at the table.
+
+**Remember**, once you've identified the variables involved, you are looking for relationships between them. You're also looking for patterns, outliers, and anything unusual.
+
+```{r plot1, fig.width=8, fig.height=12, out.width=624}
+par(mfrow = c(2, 1))
+mosaicplot(~ Sex + Age + Survived, data = Titanic, shade = TRUE, main = "Plot 1a: Titanic passenger survivorship", cex.axis = 0.8)
+mosaicplot(~ Class + Sex + Survived, data = Titanic, shade = TRUE, main = "Plot 2a: Titanic passenger survivorship", cex.axis = 0.8)
+par(mfrow = c(1, 1))
+```
+```{r plot2, fig.width=10, fig.height=10, out.width=624}
+waffle::iron(
+  waffle::waffle(
+    USArrests["California", c("Murder", "Assault", "Rape")],
+    xlab = "1 square = 1 arrest per 100,000 residents",
+    title = "Plot 2a: Violent crimes in California in 1973"
+  ),
+  waffle::waffle(
+    USArrests["Pennsylvania", c("Murder", "Assault", "Rape")],
+    xlab = "1 square = 1 arrest per 100,000 residents",
+    title = "Plot 2b: Violent crimes in Pennsylvania in 1973"
+  )
+)
+```
+```{r plot3, dependson='pageviews', fig.width=12, fig.height=8, out.width=624}
+seasons <- data.frame(
+  month = c(3, 6, 9, 12),
+  day = c(21, 21, 23, 21),
+  name = c("Spring Equinox", "Summer Solstice", "Autumnal Equinox", "Winter Solstice"),
+  starts = c("Spring", "Summer", "Autumn", "Winter"),
+  stringsAsFactors = FALSE
+)
+to_season <- function(d) {
+  d.year <- lubridate::year(d)
+  markers <- as.Date(paste(seasons$month, seasons$day, d.year, sep = "-"), format = "%m-%d-%Y")
+  lgcls <- markers <= d
+  if (all(!lgcls)) {
+    return("Winter")
+  } else {
+    return(seasons$starts[max(which(lgcls))])
+  }
+}
+pvs$season <- purrr::map_chr(pvs$date, to_season)
+pvs %>%
+  dplyr::mutate(wday = lubridate::wday(date, label = TRUE, abbr = TRUE)) %>%
+  dplyr::filter(language == "English" | views < 40e6) %>%
+  ggplot(aes(x = wday, y = views)) +
+  geom_violin(fill = "gray80", color = NA, adjust = 0.75) +
+  geom_boxplot(width = 1) +
+  scale_y_continuous(labels = compress) +
+  facet_grid(language ~ season, scales = "free_y") +
+  labs(
+    x = "Day of week", y = "Pageviews",
+    title = "Plot 3: English and French Wikipedia pageviews",
+    subtitle = "By day of week and season"
+  ) +
+  theme_bw(15)
+```
+
 ## Assessment
 
 Some questions to verify that you understand the core concepts in data visualization:
@@ -512,16 +716,15 @@ Some questions to verify that you understand the core concepts in data visualiza
 ```{r quiz}
 quiz(
   question(
-    "Three types of quantitative variables are:",
-    answer("Continuous", correct = TRUE),
-    answer("Discrete", correct = TRUE),
-    answer("Ordinal", correct = TRUE),
-    answer("Qualitative"),
-    answer("Nominal"),
-    random_answer_order = TRUE
+    "Which of these is an example of a discrete quantitative variable?",
+    answer("Time spent reading a Wikipedia article"),
+    answer("Number of articles edited by user", correct = TRUE),
+    answer("User session ID"),
+    random_answer_order = TRUE,
+    incorrect = "Time spent is continuous and user session ID is a qualitative variable."
   ),
   question(
-    "Which basic chart is the best type for two quantitative variables?",
+    "Which basic chart is the best type for two continuous quantitative variables?",
     answer("pie"),
     answer("bar"),
     answer("scatter", correct = TRUE),
@@ -538,6 +741,12 @@ quiz(
     answer("Aesthetically pleasing colors"),
     answer("Interactivity"),
     random_answer_order = TRUE
+  ),
+  question(
+    "A heatmap is a choropleth",
+    answer("TRUE"),
+    answer("FALSE", correct = TRUE),
+    incorrect = "Choropleth maps include geographical boundaries, which heatmaps do not."
   )
 )
 ```
