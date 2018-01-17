@@ -1,9 +1,11 @@
 ---
 title: "Plotting the Course Through Charted Waters"
-output: learnr::tutorial
+output:
+  learnr::tutorial:
+      theme: "cosmo"
 tutorial:
   id: "org.wikimedia.mikhail.dataviz-literacy"
-  version: 0.2.9000
+  version: 0.9.0
 runtime: shiny_prerendered
 ---
 
@@ -650,9 +652,17 @@ cowplot::plot_grid(p1, p2)
 
 ## Group activity
 
-This can be done in pairs or individually. You have 5 minutes to pick one of the following 3 visualizations, note 2-3 interesting observations from your pick, and share those insights with your neighbors at the table.
+Pair up with someone sitting next to you and pick one of the following 3 visualizations. You and your partner(s) should agree on the same one.
 
-**Remember**, once you've identified the variables involved, you are looking for relationships between them. You're also looking for patterns, outliers, and anything unusual.
+1. **This part is done individually.**
+    - Note 2-3 interesting observations.
+    - **Reminder:**
+        - Once you've identified the variables involved, you are looking for relationships between them.
+        - You're also looking for patterns and outliers.
+2. **This part is done with your partner(s).**
+    - Share your insights with your partner(s).
+    - Check if they agree with your observations.
+    - If they didn't notice the same things as you, explain how you arrived at your interpretation of the chart.
 
 ```{r plot1, fig.width=8, fig.height=12, out.width=624}
 par(mfrow = c(2, 1))
@@ -716,12 +726,19 @@ Some questions to verify that you understand the core concepts in data visualiza
 ```{r quiz}
 quiz(
   question(
-    "Which of these is an example of a discrete quantitative variable?",
+    "Which of these are examples of a discrete quantitative variable?",
     answer("Time spent reading a Wikipedia article"),
     answer("Number of articles edited by user", correct = TRUE),
     answer("User session ID"),
-    random_answer_order = TRUE,
-    incorrect = "Time spent is continuous and user session ID is a qualitative variable."
+    answer("Percent change in monthly pageviews from previous month"),
+    answer("Total pageviews last month", correct = TRUE),
+    random_answer_order = TRUE, type = "multiple",
+    incorrect = "Time spent and % change are continuous and user session ID is a qualitative variable."
+  ),
+  question(
+    "A log transformation of the data can help when a variable has positive skew (a long tail on the right)",
+    answer("True", correct = TRUE),
+    answer("False")
   ),
   question(
     "Which basic chart is the best type for two continuous quantitative variables?",
@@ -740,13 +757,23 @@ quiz(
     answer("Fancy fonts"),
     answer("Aesthetically pleasing colors"),
     answer("Interactivity"),
-    random_answer_order = TRUE
+    random_answer_order = TRUE, type = "multiple"
   ),
   question(
     "A heatmap is a choropleth",
-    answer("TRUE"),
-    answer("FALSE", correct = TRUE),
+    answer("True"),
+    answer("False", correct = TRUE),
     incorrect = "Choropleth maps include geographical boundaries, which heatmaps do not."
+  ),
+  question(
+    "Which of the following are examples of a qualitative/categorical variable? (This includes nominal and ordinal types.)",
+    answer("Survey responder's age group \"65 and older\"", correct = TRUE),
+    answer("Survey responder's age"),
+    answer("Rating scale (e.g. \"worst\" to \"best\")", correct = TRUE),
+    answer("Survey responder's gender", correct = TRUE),
+    answer("How much time user spent responding to survey"),
+    random_answer_order = TRUE, type = "multiple",
+    incorrect = "Age is quantitative while an age group is qualitative. Time spent is quantitative."
   )
 )
 ```
