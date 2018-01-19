@@ -47,7 +47,7 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <div id="section-introduction" class="section level2">
 <h2>Introduction</h2>
 <p>Heat maps, stacked area plots, mosaic plots, choropleths – oh my! There are so many different ways to visually convey relationships and patterns in data! In this workshop on data visualization literacy, you’ll learn to recognize many popular types of charts and how to glean insights from them.</p>
-<p>This workshop is <a href="https://github.com/bearloga/wmf-allhands18">available as open source</a>. There is an <a href="https://bearloga.shinyapps.io/wmf-allhands18/">interactive version</a> and a <a href="https://bearloga.github.io/wmf-allhands18/">static version</a>.</p>
+<p>This workshop is <a href="https://github.com/bearloga/wmf-allhands18">available as open source</a>. There is an <a href="http://dataviz-literacy.wmflabs.org/">interactive version</a> (which should automatically send you to either <a href="http://dataviz-lit-01.wmflabs.org/">mirror 1</a>, <a href="http://dataviz-lit-02.wmflabs.org/">mirror 2</a>, or <a href="http://dataviz-lit-03.wmflabs.org/">mirror 3</a>) and a <a href="https://bearloga.github.io/wmf-allhands18/">static version</a>.</p>
 <table>
 <thead>
 <tr class="header">
@@ -125,13 +125,15 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <ul>
 <li>Title (most plots should have this)</li>
 <li>Axis labels (almost all plots should have this)</li>
-<li>How many variables and their types</li>
+<li>How many variables and their types
+<ul>
 <li>Including ones used to dictate colors, shapes, patterns, sizes, opacities, etc.</li>
 <li>Independent (“<em>predictor</em>”) variables (e.g. time) are usually on the X (horizontal) axis
 <ul>
 <li>Occasionally time is plotted on the vertical axis for specific reasons</li>
 </ul></li>
 <li>Dependent (“<em>outcome</em>” / “<em>response</em>”) variables are usually on the Y (vertical) axis</li>
+</ul></li>
 <li>Scales (especially log-transformed ones)</li>
 </ul>
 </div>
@@ -184,12 +186,12 @@ Notice how the use of color allows us to compare survivorship within classes.
 </div>
 <div id="section-histograms-and-densities" class="section level3">
 <h3>Histograms and Densities</h3>
-<p>A <a href="https://en.wikipedia.org/wiki/Histogram">histogram</a> shows the distribution of a continuous variable by splitting it into bins and counting how many observations fall into each bin (left). Sometimes those counts are divided by the total number of observation to yield proportions/probabilities instead (right). <strong>Note</strong> that the histogram on the right also includes a <a href="https://en.wikipedia.org/wiki/Density_estimation">probability density estimate</a>.</p>
+<p>A <a href="https://en.wikipedia.org/wiki/Histogram">histogram</a> shows the distribution of a continuous variable by splitting it into bins and counting how many observations fall into each bin (left). Sometimes those counts are divided by the total number of observations to yield proportions/probabilities instead (right). <strong>Note</strong> that the histogram on the right also includes a <a href="https://en.wikipedia.org/wiki/Density_estimation">probability density estimate</a>.</p>
 <p><img src="index_files/figure-html4/histograms-1.png" width="624" /></p>
 </div>
 <div id="section-comparing-distributions" class="section level3">
 <h3>Comparing Distributions</h3>
-<p>When you see one of these, they are for comparing distributions of a continuous variable (such as sepal length of Iris flowers) between different groups (such as different species):</p>
+<p>When you see one of these, they are used for comparing distributions of a continuous variable (such as sepal length of Iris flowers) between different groups (such as different species):</p>
 <p><img src="index_files/figure-html4/comparing_distributions-1.png" width="624" /></p>
 <p>The <a href="https://en.wikipedia.org/wiki/Kernel_density_estimation">density plot</a> on the left is like a smooth histogram that doesn’t discretize the variable into bins. The <a href="https://en.wikipedia.org/wiki/Violin_plot">violin plot</a> on the right is a rotated version that makes it easier to perform the comparison because the densities (distributions) are not overlapping.</p>
 <p>A <a href="https://en.wikipedia.org/wiki/Box_plot">box-and-whiskers chart</a> (also known as a <em>box plot</em>) allows you to visually compare the distributions by way of a <a href="https://en.wikipedia.org/wiki/Five-number_summary">five number summary</a> which includes:</p>
@@ -201,7 +203,7 @@ Notice how the use of color allows us to compare survivorship within classes.
 <li>Sample maximum (the largest value)</li>
 </ul>
 <p><img src="index_files/figure-html4/boxplot-1.png" width="624" /></p>
-<p>My personal preference is when a violin plot and a box plot are combined so you still see the distribution in case there are multiple peaks – or <a href="https://en.wikipedia.org/wiki/Mode_(statistics)"><em>modes</em></a> – (something you can’t see with a box plot) but you also see the summaries:</p>
+<p>My personal preference is when a violin plot and a box plot are combined so you still see the distribution in case there are multiple peaks (<a href="https://en.wikipedia.org/wiki/Mode_(statistics)"><em>modes</em></a> – something you can’t see with just a box-and-whiskers plot – but you also see the summaries:</p>
 <div class="figure">
 <img src="index_files/figure-html4/violin_box_combined-1.png" alt="Notice how the box plot hides the three modes." width="624" />
 <p class="caption">
@@ -348,7 +350,12 @@ Notice how the French Wikipedia pageviews are no longer dampened by English Wiki
 <li>If they didn’t notice the same things as you, explain how you arrived at your interpretation of the chart.</li>
 </ul></li>
 </ol>
-<p><img src="index_files/figure-html4/plot1-1.png" width="624" /> <img src="index_files/figure-html4/plot2-1.png" width="624" /> <img src="index_files/figure-html4/plot3-1.png" width="624" /></p>
+<p>A different take on the Titanic data:</p>
+<p><img src="index_files/figure-html4/plot1-1.png" width="624" /></p>
+<p>A different take on the violent crime rates data:</p>
+<p><img src="index_files/figure-html4/plot2-1.png" width="624" /></p>
+<p>A different take on the Wikipedia pageviews data:</p>
+<p><img src="index_files/figure-html4/plot3-1.png" width="624" /></p>
 </div>
 <div id="section-assessment" class="section level2">
 <h2>Assessment</h2>
@@ -392,7 +399,7 @@ Notice how the French Wikipedia pageviews are no longer dampened by English Wiki
 </div>
 </div>
 
-<script type="application/json" data-for="htmlwidget-0a2171c863d09c88c28a">{"x":{"question":"Which basic chart is the best type for two continuous quantitative variables?","answers":[{"option":"pie","correct":false,"message":null},{"option":"bar","correct":false,"message":null},{"option":"scatter","correct":true,"message":null},{"option":"histogram","correct":false,"message":null},{"option":"box and whiskers","correct":false,"message":null}],"label":"quiz-3","skipStartButton":true,"perQuestionResponseAnswers":true,"perQuestionResponseMessaging":true,"preventUnanswered":true,"displayQuestionCount":false,"displayQuestionNumber":false,"disableRanking":true,"nextQuestionText":"","checkAnswerText":"Submit Answer","allowRetry":false,"randomSortAnswers":true,"json":{"info":{"name":"","main":""},"questions":[{"q":"Which basic chart is the best type for two continuous quantitative variables?","a":[{"option":"pie","correct":false,"message":null},{"option":"bar","correct":false,"message":null},{"option":"scatter","correct":true,"message":null},{"option":"histogram","correct":false,"message":null},{"option":"box and whiskers","correct":false,"message":null}],"correct":"Correct!","incorrect":"Incorrect."}]}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-0a2171c863d09c88c28a">{"x":{"question":"Which basic chart is the best type for showing a relationship between two continuous quantitative variables?","answers":[{"option":"pie","correct":false,"message":null},{"option":"bar","correct":false,"message":null},{"option":"scatter","correct":true,"message":null},{"option":"histogram","correct":false,"message":null},{"option":"box and whiskers","correct":false,"message":null},{"option":"mosaic","correct":false,"message":null}],"label":"quiz-3","skipStartButton":true,"perQuestionResponseAnswers":true,"perQuestionResponseMessaging":true,"preventUnanswered":true,"displayQuestionCount":false,"displayQuestionNumber":false,"disableRanking":true,"nextQuestionText":"","checkAnswerText":"Submit Answer","allowRetry":false,"randomSortAnswers":true,"json":{"info":{"name":"","main":""},"questions":[{"q":"Which basic chart is the best type for showing a relationship between two continuous quantitative variables?","a":[{"option":"pie","correct":false,"message":null},{"option":"bar","correct":false,"message":null},{"option":"scatter","correct":true,"message":null},{"option":"histogram","correct":false,"message":null},{"option":"box and whiskers","correct":false,"message":null},{"option":"mosaic","correct":false,"message":null}],"correct":"Correct!","incorrect":"Incorrect."}]}},"evals":[],"jsHooks":[]}</script>
 </td>
 </tr>
 <tr>
@@ -405,7 +412,7 @@ Notice how the French Wikipedia pageviews are no longer dampened by English Wiki
 </div>
 </div>
 
-<script type="application/json" data-for="htmlwidget-1cff93849db96ff5d462">{"x":{"question":"An effective data visualization will include some or all of the following:","answers":[{"option":"Distribution of a variable","correct":true,"message":null},{"option":"Relationship(s) between variables","correct":true,"message":null},{"option":"Labels","correct":true,"message":null},{"option":"Fancy fonts","correct":false,"message":null},{"option":"Aesthetically pleasing colors","correct":false,"message":null},{"option":"Interactivity","correct":false,"message":null}],"label":"quiz-4","skipStartButton":true,"perQuestionResponseAnswers":true,"perQuestionResponseMessaging":true,"preventUnanswered":true,"displayQuestionCount":false,"displayQuestionNumber":false,"disableRanking":true,"nextQuestionText":"","checkAnswerText":"Submit Answer","allowRetry":false,"randomSortAnswers":true,"json":{"info":{"name":"","main":""},"questions":[{"q":"An effective data visualization will include some or all of the following:","a":[{"option":"Distribution of a variable","correct":true,"message":null},{"option":"Relationship(s) between variables","correct":true,"message":null},{"option":"Labels","correct":true,"message":null},{"option":"Fancy fonts","correct":false,"message":null},{"option":"Aesthetically pleasing colors","correct":false,"message":null},{"option":"Interactivity","correct":false,"message":null}],"correct":"Correct!","incorrect":"Incorrect.","force_checkbox":true}]}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-1cff93849db96ff5d462">{"x":{"question":"An effective data visualization will include some or all of the following:","answers":[{"option":"Distribution of a variable","correct":true,"message":null},{"option":"Relationship(s) between variables","correct":true,"message":null},{"option":"Labels","correct":true,"message":null},{"option":"Fancy fonts","correct":false,"message":null},{"option":"Aesthetically pleasing colors","correct":false,"message":null},{"option":"Interactivity","correct":false,"message":null}],"label":"quiz-4","skipStartButton":true,"perQuestionResponseAnswers":true,"perQuestionResponseMessaging":true,"preventUnanswered":true,"displayQuestionCount":false,"displayQuestionNumber":false,"disableRanking":true,"nextQuestionText":"","checkAnswerText":"Submit Answer","allowRetry":false,"randomSortAnswers":true,"json":{"info":{"name":"","main":""},"questions":[{"q":"An effective data visualization will include some or all of the following:","a":[{"option":"Distribution of a variable","correct":true,"message":null},{"option":"Relationship(s) between variables","correct":true,"message":null},{"option":"Labels","correct":true,"message":null},{"option":"Fancy fonts","correct":false,"message":null},{"option":"Aesthetically pleasing colors","correct":false,"message":null},{"option":"Interactivity","correct":false,"message":null}],"correct":"Correct!","incorrect":"Interactivity CAN make a data visualization more effective, but we have seen static (non-interactive) examples so far that are completely fine without it. When it comes to colors, the most important factor is whether they convey the information well, and having a color scheme that is aesthetically pleasing is really nice, but is not technically necessary. Fancy fonts can look good, but they don&#39;t add to the story the visualization is meant to tell.","force_checkbox":true}]}},"evals":[],"jsHooks":[]}</script>
 </td>
 </tr>
 <tr>
@@ -479,7 +486,7 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::register_http_handlers(session, metadata = list(id = "org.wikimedia.mikhail.dataviz-literacy", version = "0.9.0"))
+learnr:::register_http_handlers(session, metadata = list(id = "org.wikimedia.mikhail.dataviz-literacy", version = "0.9.1"))
 </script>
  
 <script type="application/shiny-prerendered" data-context="data">

@@ -5,7 +5,7 @@ output:
       theme: "cosmo"
 tutorial:
   id: "org.wikimedia.mikhail.dataviz-literacy"
-  version: 0.9.0
+  version: 0.9.1
 runtime: shiny_prerendered
 ---
 
@@ -29,7 +29,7 @@ compress <- function(x, round_by = 2) {
 
 Heat maps, stacked area plots, mosaic plots, choropleths -- oh my! There are so many different ways to visually convey relationships and patterns in data! In this workshop on data visualization literacy, you'll learn to recognize many popular types of charts and how to glean insights from them.
 
-This workshop is [available as open source](https://github.com/bearloga/wmf-allhands18). There is an [interactive version](https://bearloga.shinyapps.io/wmf-allhands18/) and a [static version](https://bearloga.github.io/wmf-allhands18/).
+This workshop is [available as open source](https://github.com/bearloga/wmf-allhands18). There is an [interactive version](http://dataviz-literacy.wmflabs.org/) (which should automatically send you to either [mirror 1](http://dataviz-lit-01.wmflabs.org/), [mirror 2](http://dataviz-lit-02.wmflabs.org/), or [mirror 3](http://dataviz-lit-03.wmflabs.org/)) and a [static version](https://bearloga.github.io/wmf-allhands18/).
 
 |              | Contact Information                       |
 |-------------:|:------------------------------------------|
@@ -75,10 +75,10 @@ Refer to [levels of measurement](https://en.wikipedia.org/wiki/Level_of_measurem
 - Title (most plots should have this)
 - Axis labels (almost all plots should have this)
 - How many variables and their types
-- Including ones used to dictate colors, shapes, patterns, sizes, opacities, etc.
-- Independent ("*predictor*") variables (e.g. time) are usually on the X (horizontal) axis
-  - Occasionally time is plotted on the vertical axis for specific reasons
-- Dependent ("*outcome*" / "*response*") variables are usually on the Y (vertical) axis
+    - Including ones used to dictate colors, shapes, patterns, sizes, opacities, etc.
+    - Independent ("*predictor*") variables (e.g. time) are usually on the X (horizontal) axis
+        - Occasionally time is plotted on the vertical axis for specific reasons
+    - Dependent ("*outcome*" / "*response*") variables are usually on the Y (vertical) axis
 - Scales (especially log-transformed ones)
 
 ## Common visualizations
@@ -172,22 +172,22 @@ cowplot::plot_grid(top_row, p3, ncol = 1)
 
 ### Histograms and Densities
 
-A [histogram](https://en.wikipedia.org/wiki/Histogram) shows the distribution of a continuous variable by splitting it into bins and counting how many observations fall into each bin (left). Sometimes those counts are divided by the total number of observation to yield proportions/probabilities instead (right). **Note** that the histogram on the right also includes a [probability density estimate](https://en.wikipedia.org/wiki/Density_estimation).
+A [histogram](https://en.wikipedia.org/wiki/Histogram) shows the distribution of a continuous variable by splitting it into bins and counting how many observations fall into each bin (left). Sometimes those counts are divided by the total number of observations to yield proportions/probabilities instead (right). **Note** that the histogram on the right also includes a [probability density estimate](https://en.wikipedia.org/wiki/Density_estimation).
 
 ```{r histograms, fig.width=10, fig.height=5, out.width=624}
 par(mfrow = c(1, 2))
 hist(trees$Height, col = "gray40",
-     main = "Height of Black Cheery Trees",
+     main = "Height of Black Cherry Trees",
      xlab = "Height (ft)")
 hist(trees$Height, col = "gray70",
-     main = "Height of Black Cheery Trees",
+     main = "Height of Black Cherry Trees",
      xlab = "Height (ft)", freq = FALSE, border = FALSE)
 lines(density(trees$Height, adj = 1), lwd = 2)
 ```
 
 ### Comparing Distributions
 
-When you see one of these, they are for comparing distributions of a continuous variable (such as sepal length of Iris flowers) between different groups (such as different species):
+When you see one of these, they are used for comparing distributions of a continuous variable (such as sepal length of Iris flowers) between different groups (such as different species):
 
 ```{r comparing_distributions, fig.width=10, fig.height=5, out.width=624}
 p1 <- ggplot(data = iris, aes(x = Sepal.Length, fill = Species)) +
@@ -244,7 +244,7 @@ ggplot(data = iris, aes(y = Sepal.Length, x = 1)) +
   )
 ```
 
-My personal preference is when a violin plot and a box plot are combined so you still see the distribution in case there are multiple peaks -- or [*modes*](https://en.wikipedia.org/wiki/Mode_(statistics)) -- (something you can't see with a box plot) but you also see the summaries:
+My personal preference is when a violin plot and a box plot are combined so you still see the distribution in case there are multiple peaks ([*modes*](https://en.wikipedia.org/wiki/Mode_(statistics)) -- something you can't see with just a box-and-whiskers plot -- but you also see the summaries:
 
 ```{r violin_box_combined, fig.cap='Notice how the box plot hides the three modes.'}
 temp <- iris %>%
@@ -455,7 +455,7 @@ DT::datatable(
 ```{r heatmap, fig.height=10, fig.width=8, out.width=624}
 ggplot(nba.m, aes(variable, Name)) +
   geom_tile(aes(fill = rescale), color = "white") +
-  scale_fill_viridis_c(
+  viridis::scale_fill_viridis(
     "Compared to other 49 players",
     breaks = c(-2, 0, 2, 4),
     labels = function(x) {
@@ -664,26 +664,36 @@ Pair up with someone sitting next to you and pick one of the following 3 visuali
     - Check if they agree with your observations.
     - If they didn't notice the same things as you, explain how you arrived at your interpretation of the chart.
 
+A different take on the Titanic data:
+
 ```{r plot1, fig.width=8, fig.height=12, out.width=624}
 par(mfrow = c(2, 1))
 mosaicplot(~ Sex + Age + Survived, data = Titanic, shade = TRUE, main = "Plot 1a: Titanic passenger survivorship", cex.axis = 0.8)
 mosaicplot(~ Class + Sex + Survived, data = Titanic, shade = TRUE, main = "Plot 2a: Titanic passenger survivorship", cex.axis = 0.8)
 par(mfrow = c(1, 1))
 ```
-```{r plot2, fig.width=10, fig.height=10, out.width=624}
+
+A different take on the violent crime rates data:
+
+```{r plot2, fig.width=10, fig.height=5, out.width=624}
 waffle::iron(
   waffle::waffle(
     USArrests["California", c("Murder", "Assault", "Rape")],
     xlab = "1 square = 1 arrest per 100,000 residents",
-    title = "Plot 2a: Violent crimes in California in 1973"
+    title = "Plot 2a: Violent crimes in California in 1973",
+    rows = 10
   ),
   waffle::waffle(
     USArrests["Pennsylvania", c("Murder", "Assault", "Rape")],
     xlab = "1 square = 1 arrest per 100,000 residents",
-    title = "Plot 2b: Violent crimes in Pennsylvania in 1973"
+    title = "Plot 2b: Violent crimes in Pennsylvania in 1973",
+    rows = 4
   )
 )
 ```
+
+A different take on the Wikipedia pageviews data:
+
 ```{r plot3, dependson='pageviews', fig.width=12, fig.height=8, out.width=624}
 seasons <- data.frame(
   month = c(3, 6, 9, 12),
@@ -741,12 +751,13 @@ quiz(
     answer("False")
   ),
   question(
-    "Which basic chart is the best type for two continuous quantitative variables?",
+    "Which basic chart is the best type for showing a relationship between two continuous quantitative variables?",
     answer("pie"),
     answer("bar"),
     answer("scatter", correct = TRUE),
     answer("histogram"),
     answer("box and whiskers"),
+    answer("mosaic"),
     random_answer_order = TRUE
   ),
   question(
@@ -757,7 +768,8 @@ quiz(
     answer("Fancy fonts"),
     answer("Aesthetically pleasing colors"),
     answer("Interactivity"),
-    random_answer_order = TRUE, type = "multiple"
+    random_answer_order = TRUE, type = "multiple",
+    incorrect = "Interactivity CAN make a data visualization more effective, but we have seen static (non-interactive) examples so far that are completely fine without it. When it comes to colors, the most important factor is whether they convey the information well, and having a color scheme that is aesthetically pleasing is really nice, but is not technically necessary. Fancy fonts can look good, but they don't add to the story the visualization is meant to tell."
   ),
   question(
     "A heatmap is a choropleth",

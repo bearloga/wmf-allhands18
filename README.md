@@ -6,7 +6,7 @@ To be given at [Wikimedia Foundation's All Hands 2018](https://office.wikimedia.
 
 ## Setup
 
-This workshop uses the [learnr](https://rstudio.github.io/learnr/) and [rmarkdown](http://rmarkdown.rstudio.com/) packages from [RStudio](https://www.rstudio.com/) to create [an interactive web application](https://bearloga.shinyapps.io/wmf-allhands18/) and [a static web page](https://bearloga.github.io/wmf-allhands18/).
+This workshop uses the [learnr](https://rstudio.github.io/learnr/) and [rmarkdown](http://rmarkdown.rstudio.com/) packages from [RStudio](https://www.rstudio.com/) to create [an interactive web application](http://dataviz-literacy.wmflabs.org/) (which should automatically send you to either [mirror 1](http://dataviz-lit-01.wmflabs.org/), [mirror 2](http://dataviz-lit-02.wmflabs.org/), or [mirror 3](http://dataviz-lit-03.wmflabs.org/)) and [a static web page](https://bearloga.github.io/wmf-allhands18/).
 
 ```R
 install.packages(c("tidyverse", "devtools", "learnr"))
