@@ -30,10 +30,18 @@ There is a separate VM that acts as a portal and sends users to the different se
 | dataviz-lit-02   | shinyserv-02     |         3838 | 10.68.17.173:3838 | App server |
 | dataviz-lit-03   | shinyserv-03     |         3838 | 10.68.19.32:3838  | App server |
 
-We edited `/etc/nginx/sites-available/default` to have the following:
+We edited `/etc/nginx/sites-available/default` to have the following configuration based on recommendations in [this article](https://support.rstudio.com/hc/en-us/articles/213733868-Running-Shiny-Server-with-a-Proxy):
 
 ```nginx
+map $http_upgrade $connection_upgrade {
+     default upgrade;
+     ''      close;
+}
 upstream datavizlit {
+    # some kind of session affinity might be required if shiny-r isn't stateless
+    # (either cookie or ip_hash)
+    # sticky cookie srv_id expires=1h domain=.dataviz-literacy.wmflabs.org path=/;
+    # ip_hash;
     server 10.68.19.31:3838;
     server 10.68.17.173:3838;
     server 10.68.19.32:3838;
@@ -42,8 +50,15 @@ server {
     listen 3838;
     location / {
         proxy_pass http://datavizlit;
+        # websocket require HTTP 1.1
+        proxy_http_version 1.1;
+        proxy_redirect off;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $connection_upgrade;
+        # proxy_read_timeout 1d;
+        proxy_buffering off;
     }
 }
 ```
 
-**TODO**: there's weirdness when going to `dataviz-literacy.wmflabs.org` that we need to fix. Going to one of the three mirrors directly works fine but not when using the load balancing proxy.
+We are also using `nginx-full` which includes support for websockets.
