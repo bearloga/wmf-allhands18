@@ -448,11 +448,12 @@ colnames(nba) <- c(
   "Offensive rebounds", "Defensive rebounds", "Total rebounds",
   "Assists", "Steals", "Blocks", "Turnovers", "PF"
 )
-nba$PF <- NULL
-nba.m <- reshape2::melt(nba)
+nba$PF <- NULL; nba.m <- reshape2::melt(nba)
 nba.m <- plyr::ddply(nba.m, plyr::.(variable), transform, rescale = scale(value))
 ```
-```{r }
+
+```{r dt, dependson='nba_data', eval=FALSE}
+message("This is where the interactive NBA data table should be.")
 DT::datatable(
   nba,
   options = list(
@@ -463,7 +464,8 @@ DT::datatable(
 ) %>%
   DT::formatPercentage(c("Field goal %", "Free throw %", "Three-point %"))
 ```
-```{r heatmap, fig.height=10, fig.width=8, out.width=624}
+
+```{r heatmap, fig.height=10, fig.width=8, out.width=624, dependson='nba_data'}
 ggplot(nba.m, aes(variable, Name)) +
   geom_tile(aes(fill = rescale), color = "white") +
   viridis::scale_fill_viridis(

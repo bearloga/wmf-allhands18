@@ -15,5 +15,3 @@ vignettes/*.pdf
 
 *.RData
 rsconnect/
-index_cache/
-index_data/data_chunks_index.txt
