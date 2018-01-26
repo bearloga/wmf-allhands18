@@ -23,12 +23,12 @@ The workshop _can_ be deployed to shinyapps.io but we are hosting it using [Wiki
 
 There is a separate VM that acts as a portal and sends users to the different servers so that we don't have a single overloaded Shiny server. We are using the following web proxies configured in [Horizon](https://wikitech.wikimedia.org/w/index.php?title=Help:Horizon_FAQ):
 
-| Hostname         | Backend instance | Backend port | Backend IP        | Role       |
-|:-----------------|:-----------------|-------------:|:------------------|:-----------|
-| dataviz-literacy | shinyserv-lb     |         3838 | 10.68.19.61:3838  | Portal     |
-| dataviz-lit-01   | shinyserv-01     |         3838 | 10.68.19.31:3838  | App server |
-| dataviz-lit-02   | shinyserv-02     |         3838 | 10.68.17.173:3838 | App server |
-| dataviz-lit-03   | shinyserv-03     |         3838 | 10.68.19.32:3838  | App server |
+| Hostname         | Backend instance | Backend port | Backend IP   | Role       |
+|:-----------------|:-----------------|-------------:|:-------------|:-----------|
+| dataviz-literacy | shinyserv-lb     |         3838 | 10.68.19.61  | Portal     |
+| dataviz-lit-01   | shinyserv-01     |         3838 | 10.68.19.31  | App server |
+| dataviz-lit-02   | shinyserv-02     |         3838 | 10.68.17.173 | App server |
+| dataviz-lit-03   | shinyserv-03     |         3838 | 10.68.19.32  | App server |
 
 We edited `/etc/nginx/sites-available/default` to have the following configuration based on recommendations in [this article](https://support.rstudio.com/hc/en-us/articles/213733868-Running-Shiny-Server-with-a-Proxy):
 
