@@ -5,7 +5,7 @@ output:
       theme: "cosmo"
 tutorial:
   id: "org.wikimedia.mikhail.dataviz-literacy"
-  version: 0.9.4
+  version: 0.9.5
 runtime: shiny_prerendered
 ---
 
@@ -202,7 +202,7 @@ For a deeper look at histograms, I encourage you to check out [Exploring Histogr
 
 When you see one of these, they are used for comparing distributions of a continuous variable (such as sepal length of Iris flowers) between different groups (such as different species):
 
-```{r comparing_distributions, fig.width=15, fig.height=5, out.width=624}
+```{r comparing_distributions, fig.width=10, fig.height=5, out.width=624}
 p1 <- ggplot(data = iris, aes(x = Sepal.Length, fill = Species)) +
   geom_density(alpha = 0.5, adjust = 1.5) +
   scale_fill_brewer(palette = "Set1") +
@@ -213,18 +213,25 @@ p2 <- ggplot(data = iris, aes(y = Sepal.Length, x = Species)) +
   scale_fill_brewer(palette = "Set1") +
   theme_minimal(14) +
   labs(y = "Sepal length (cm)", title = "Violin plot")
+cowplot::plot_grid(p1, p2, nrow = 1)
+```
+
+The [density plot](https://en.wikipedia.org/wiki/Kernel_density_estimation) on the left is like a smooth histogram that doesn't discretize the variable into bins. The [violin plot](https://en.wikipedia.org/wiki/Violin_plot) on the left is a rotated version that makes it easier to perform the comparison because the densities (distributions) are not overlapping.
+
+An alternative called *ridgeline plot* recently gained a lot of popularity for comparing distributions across groups because of how compact it was, which was especially useful when comparing many groups.
+
+```{r ridgeline, eval=FALSE}
 library(ggridges) # formerly ggjoy
-p3 <- ggplot(iris, aes(x = Sepal.Length, y = Species, fill = Species)) + 
+ggplot(iris, aes(x = Sepal.Length, y = Species, fill = Species)) + 
   geom_density_ridges() +
   scale_x_continuous(expand = c(0.01, 0)) +
   scale_y_discrete(expand = c(0.01, 0)) +
   scale_fill_brewer(palette = "Set1") +
   theme_minimal(14) +
   labs(x = "Sepal length (cm)", title = "Ridgeline plot")
-cowplot::plot_grid(p1, p2, p3, nrow = 1)
 ```
 
-The [density plot](https://en.wikipedia.org/wiki/Kernel_density_estimation) on the left is like a smooth histogram that doesn't discretize the variable into bins. The [violin plot](https://en.wikipedia.org/wiki/Violin_plot) in the middle is a rotated version that makes it easier to perform the comparison because the densities (distributions) are not overlapping. Recently, an alternative called *ridgeline plot* -- on the right -- gained a lot of popularity for comparing distributions across groups. (They were originally called *joyplots* but that name [was deprecated](http://serialmentor.com/blog/2017/9/15/goodbye-joyplots).)
+![Ridgeline plot of sepal length.](index_files/figure-html4/ridgeline.png)
 
 A [box-and-whiskers chart](https://en.wikipedia.org/wiki/Box_plot) (also known as a *box plot*) allows you to visually compare the distributions by way of a [five number summary](https://en.wikipedia.org/wiki/Five-number_summary) which includes:
 
