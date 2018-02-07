@@ -12,7 +12,7 @@ This workshop uses the [learnr](https://rstudio.github.io/learnr/) and [rmarkdow
 install.packages(c("tidyverse", "devtools", "learnr"))
 # Visualizations
 devtools::install_github("tidyverse/ggplot2")
-install.packages(c("cowplot", "waffle", "RColorBrewer", "DT", "mixtools"))
+install.packages(c("cowplot", "waffle", "RColorBrewer", "DT", "mixtools", "ggridges"))
 # Data
 install.packages("pageviews")
 ```

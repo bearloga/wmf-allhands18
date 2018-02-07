@@ -46,7 +46,7 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 
 <div id="section-introduction" class="section level2">
 <h2>Introduction</h2>
-<p>Heat maps, stacked area plots, mosaic plots, choropleths – oh my! There are so many different ways to visually convey relationships and patterns in data! In this workshop on data visualization literacy, you’ll learn to recognize many popular types of charts and how to glean insights from them.</p>
+<p>Heat maps, stacked area plots, mosaic plots, choropleths – oh my! There are so many different ways to visually convey relationships and patterns in data! In this workshop on data visualization literacy, you’ll learn to recognize many popular types of charts and how to glean insights from them. The <strong>Appendix</strong> contains some examples of data visualization as visual essays and it also includes links to resources for learning how to create your own.</p>
 <p>This workshop is <a href="https://github.com/bearloga/wmf-allhands18">available as open source</a>. There is an <a href="http://dataviz-literacy.wmflabs.org/">interactive version</a> (which should automatically send you to either <a href="http://dataviz-lit-01.wmflabs.org/">mirror 1</a>, <a href="http://dataviz-lit-02.wmflabs.org/">mirror 2</a>, or <a href="http://dataviz-lit-03.wmflabs.org/">mirror 3</a>) and a <a href="https://bearloga.github.io/wmf-allhands18/">static version</a>.</p>
 <table>
 <thead>
@@ -196,12 +196,13 @@ Notice how the use of color allows us to compare survivorship within classes.
 The three little histo-bears.
 </p>
 </div>
+<p>For a deeper look at histograms, I encourage you to check out <a href="https://tinlizzie.org/histograms/">Exploring Histograms</a> by Aran Lunzer and Amelia McNamara.</p>
 </div>
 <div id="section-comparing-distributions" class="section level3">
 <h3>Comparing Distributions</h3>
 <p>When you see one of these, they are used for comparing distributions of a continuous variable (such as sepal length of Iris flowers) between different groups (such as different species):</p>
 <p><img src="index_files/figure-html4/comparing_distributions-1.png" width="624" /></p>
-<p>The <a href="https://en.wikipedia.org/wiki/Kernel_density_estimation">density plot</a> on the left is like a smooth histogram that doesn’t discretize the variable into bins. The <a href="https://en.wikipedia.org/wiki/Violin_plot">violin plot</a> on the right is a rotated version that makes it easier to perform the comparison because the densities (distributions) are not overlapping.</p>
+<p>The <a href="https://en.wikipedia.org/wiki/Kernel_density_estimation">density plot</a> on the left is like a smooth histogram that doesn’t discretize the variable into bins. The <a href="https://en.wikipedia.org/wiki/Violin_plot">violin plot</a> in the middle is a rotated version that makes it easier to perform the comparison because the densities (distributions) are not overlapping. Recently, an alternative called <em>ridgeline plot</em> – on the right – gained a lot of popularity for comparing distributions across groups. (They were originally called <em>joyplots</em> but that name <a href="http://serialmentor.com/blog/2017/9/15/goodbye-joyplots">was deprecated</a>.)</p>
 <p>A <a href="https://en.wikipedia.org/wiki/Box_plot">box-and-whiskers chart</a> (also known as a <em>box plot</em>) allows you to visually compare the distributions by way of a <a href="https://en.wikipedia.org/wiki/Five-number_summary">five number summary</a> which includes:</p>
 <ul>
 <li>Sample minimum (the smallest value)</li>
@@ -237,9 +238,9 @@ These are usually not present in final drafts of reports and are instead used as
 </div>
 <p>At first glance there is <strong>a lot</strong> going on in that particular matrix, but really there are three main components that we can focus on just one at a time:</p>
 <ol style="list-style-type: decimal">
-<li>the upper triangle panels have basic scatter plots with points colored according to species for each pair of variables,</li>
-<li>the diagonal panels have histograms of the individual variables, and</li>
-<li>the lower triangle panels are also scatterplots, but with ellipses tracing the two-dimensional densities (assuming <a href="https://en.wikipedia.org/wiki/Multivariate_normal_distribution">Normality</a>).</li>
+<li>the four panels along the <em>diagonal</em> have histograms of the individual variables,</li>
+<li>the six panels in the <em>upper triangle</em> above the diagonal have basic scatter plots with points colored according to species for each pair of variables, and</li>
+<li>the six panels in the <em>lower triangle</em> below the diagonal are also scatterplots, but with ellipses tracing the two-dimensional densities (assuming <a href="https://en.wikipedia.org/wiki/Multivariate_normal_distribution">Normality</a>).</li>
 </ol>
 <p><a href="https://en.wikipedia.org/wiki/Line_chart">Line charts</a> are the most common way to visualize <a href="https://en.wikipedia.org/wiki/Time_series">time series</a> data, with time <strong>usually</strong> as the horizontal X axis and range of a quantitative variable as the vertical Y axis:</p>
 <div class="figure">
@@ -257,7 +258,7 @@ You may notice that the linear scale and the difference in magnitude makes it di
 <p><a href="https://en.wikipedia.org/wiki/Mosaic_plot">Mosaic plots</a> are used to visualize the relationships between two or more qualitative variables, and they are incredibly rare. While they are very useful once you learn how to read them, that step can be very difficult and so it is unsurprising that they don’t show up more. They’re often used by statisticians during exploratory data analysis to perform a visual check before performing a statistical test of independence.</p>
 <p>We will use these to examine distribution of hair and eye colors in ~600 statistics students at University of Delaware reported by Snee, R. D. in <em>The American Statistician</em> journal in 1974:</p>
 <p><img src="index_files/figure-html4/mosaic1-1.png" width="624" /></p>
-<p>We can extend a mosaic plot to include <em>standardized residuals</em> (also called <a href="https://en.wikipedia.org/wiki/Studentized_residual"><em>studendized residuals</em></a>) from a <a href="https://en.wikipedia.org/wiki/Log-linear_model">log-linear model</a>. Cells representing <span style="color:red;font-weight:bold;">negative residuals</span> – meaning there are <span style="color:red;font-weight:bold;">fewer observations than would have been expected under independence</span> – are drawn as <span style="color:red;font-weight:bold;">red</span> with broken borders; <span style="color:blue;font-weight:bold;">positive residuals</span> – meaning <span style="color:blue;font-weight:bold;">more observations than would be expected</span> – are drawn in <span style="color:blue;font-weight:bold;">blue</span> with solid borders.</p>
+<p>We can extend a mosaic plot to include <em>standardized residuals</em> (also called <a href="https://en.wikipedia.org/wiki/Studentized_residual"><em>studentized residuals</em></a>) from a <a href="https://en.wikipedia.org/wiki/Log-linear_model">log-linear model</a>. Cells representing <span style="color:red;font-weight:bold;">negative residuals</span> – meaning there are <span style="color:red;font-weight:bold;">fewer observations than would have been expected under independence</span> – are drawn as <span style="color:red;font-weight:bold;">red</span> with broken borders; <span style="color:blue;font-weight:bold;">positive residuals</span> – meaning <span style="color:blue;font-weight:bold;">more observations than would be expected</span> – are drawn in <span style="color:blue;font-weight:bold;">blue</span> with solid borders.</p>
 <p><img src="index_files/figure-html4/mosaic2-1.png" width="624" /></p>
 <p>We can also look at the proportions across all three variables:</p>
 <p><img src="index_files/figure-html4/mosaic3-1.png" width="624" /></p>
@@ -270,7 +271,7 @@ You may notice that the linear scale and the difference in magnitude makes it di
 </div>
 <div id="section-stacked-area-plots" class="section level3">
 <h3>Stacked area plots</h3>
-<p>A <em>stacked area plot</em> is a way to visualize multiple amounts/proportions changes over time.</p>
+<p>A <em>stacked area plot</em> is a way to visualize changes in amounts (or proportions) over time.</p>
 <div class="figure">
 <img src="index_files/figure-html4/stacked_area-1.png" alt="Beginning with 1925, the number of people over the age of 64 has increased dramatically, especially after 1975." width="624" />
 <p class="caption">
@@ -280,7 +281,7 @@ Beginning with 1925, the number of people over the age of 64 has increased drama
 </div>
 <div id="section-heat-maps" class="section level3">
 <h3>Heat maps</h3>
-<p><a href="https://en.wikipedia.org/wiki/Heat_map">Heatmaps</a> are a graphical representation of matrices. For example, we can visualize the following dataset of top 50 NBA players’ performance statistics from <a href="(https://en.wikipedia.org/wiki/2008%E2%80%9309_NBA_season)">the 2008-09 season</a> (obtained from <a href="https://www.rotowire.com/">RotoWire</a>, formerly databaseBasketball):</p>
+<p><a href="https://en.wikipedia.org/wiki/Heat_map">Heatmaps</a> are a graphical representation of matrices. For example, we can visualize a dataset of top 50 NBA players’ performance statistics from <a href="(https://en.wikipedia.org/wiki/2008%E2%80%9309_NBA_season)">the 2008-09 season</a> (obtained from <a href="https://www.rotowire.com/">RotoWire</a>, formerly databaseBasketball):</p>
 <p><img src="index_files/figure-html4/heatmap-1.png" width="624" /></p>
 <p>Some observations:</p>
 <ul>
@@ -327,7 +328,7 @@ Almost all of the crew was male and almost 80% of them died. Most of the 3rd cla
 <h2>Scales and transformed data</h2>
 <p>Sometimes the author of the visualization has chosen to apply a <a href="https://en.wikipedia.org/wiki/Data_transformation_(statistics)">transformation to the data</a> because the data is <a href="https://en.wikipedia.org/wiki/Skewness">skewed</a>. It is important to watch out for these, especially <a href="https://en.wikipedia.org/wiki/Logarithmic_scale">logarithmic scales</a>.</p>
 <p><img src="index_files/figure-html4/transformed_scatterplot-1.png" width="624" height="624" /></p>
-<p>Let us revisit the pageviews data from earlier by utilizing the logarithmic axis:</p>
+<p>Let us revisit the pageviews data from earlier by utilizing a logarithmic axis:</p>
 <div class="figure">
 <img src="index_files/figure-html4/tsplot_log10-1.png" alt="Notice how the French Wikipedia pageviews are no longer dampened by English Wikipedia pageviews' magnitude." width="624" />
 <p class="caption">
@@ -475,7 +476,7 @@ Notice how the French Wikipedia pageviews are no longer dampened by English Wiki
 <h3>Further reading</h3>
 <ul>
 <li><a href="https://www.edwardtufte.com/tufte/books_vdqi">The Visual Display of Quantitative Information</a> by Edward Tufte</li>
-<li><a href="http://www.springer.com/us/book/9783540330363">Handbook of Data Visualization</a></li>
+<li><a href="http://www.springer.com/us/book/9783540330363">Handbook of Data Visualization</a> (Editors: Chun-houh Chen, Wolfgang Karl Härdle, Antony Unwin)</li>
 </ul>
 </div>
 <div id="section-making-your-own" class="section level3">
@@ -493,7 +494,7 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::register_http_handlers(session, metadata = list(id = "org.wikimedia.mikhail.dataviz-literacy", version = "0.9.2"))
+learnr:::register_http_handlers(session, metadata = list(id = "org.wikimedia.mikhail.dataviz-literacy", version = "0.9.4"))
 </script>
  
 <script type="application/shiny-prerendered" data-context="data">

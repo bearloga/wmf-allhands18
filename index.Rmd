@@ -5,7 +5,7 @@ output:
       theme: "cosmo"
 tutorial:
   id: "org.wikimedia.mikhail.dataviz-literacy"
-  version: 0.9.2
+  version: 0.9.4
 runtime: shiny_prerendered
 ---
 
@@ -27,7 +27,7 @@ compress <- function(x, round_by = 2) {
 
 ## Introduction
 
-Heat maps, stacked area plots, mosaic plots, choropleths -- oh my! There are so many different ways to visually convey relationships and patterns in data! In this workshop on data visualization literacy, you'll learn to recognize many popular types of charts and how to glean insights from them.
+Heat maps, stacked area plots, mosaic plots, choropleths -- oh my! There are so many different ways to visually convey relationships and patterns in data! In this workshop on data visualization literacy, you'll learn to recognize many popular types of charts and how to glean insights from them. The **Appendix** contains some examples of data visualization as visual essays and it also includes links to resources for learning how to create your own.
 
 This workshop is [available as open source](https://github.com/bearloga/wmf-allhands18). There is an [interactive version](http://dataviz-literacy.wmflabs.org/) (which should automatically send you to either [mirror 1](http://dataviz-lit-01.wmflabs.org/), [mirror 2](http://dataviz-lit-02.wmflabs.org/), or [mirror 3](http://dataviz-lit-03.wmflabs.org/)) and a [static version](https://bearloga.github.io/wmf-allhands18/).
 
@@ -196,25 +196,35 @@ hist(trees$Height, col = "gray40", breaks = 6, xlab = "Height (ft)", main = "Jus
 hist(trees$Height, col = "gray40", breaks = 18, xlab = "Height (ft)", main = "Too narrow")
 ```
 
+For a deeper look at histograms, I encourage you to check out [Exploring Histograms](https://tinlizzie.org/histograms/) by Aran Lunzer and Amelia McNamara.
+
 ### Comparing Distributions
 
 When you see one of these, they are used for comparing distributions of a continuous variable (such as sepal length of Iris flowers) between different groups (such as different species):
 
-```{r comparing_distributions, fig.width=10, fig.height=5, out.width=624}
+```{r comparing_distributions, fig.width=15, fig.height=5, out.width=624}
 p1 <- ggplot(data = iris, aes(x = Sepal.Length, fill = Species)) +
   geom_density(alpha = 0.5, adjust = 1.5) +
   scale_fill_brewer(palette = "Set1") +
   theme_minimal(14) +
   labs(x = "Sepal length (cm)", title = "Density plot")
 p2 <- ggplot(data = iris, aes(y = Sepal.Length, x = Species)) +
-  geom_violin(aes(fill = Species), alpha = 0.5, adjust = 1.5) +
+  geom_violin(aes(fill = Species), adjust = 1.5) +
   scale_fill_brewer(palette = "Set1") +
   theme_minimal(14) +
   labs(y = "Sepal length (cm)", title = "Violin plot")
-cowplot::plot_grid(p1, p2, nrow = 1)
+library(ggridges) # formerly ggjoy
+p3 <- ggplot(iris, aes(x = Sepal.Length, y = Species, fill = Species)) + 
+  geom_density_ridges() +
+  scale_x_continuous(expand = c(0.01, 0)) +
+  scale_y_discrete(expand = c(0.01, 0)) +
+  scale_fill_brewer(palette = "Set1") +
+  theme_minimal(14) +
+  labs(x = "Sepal length (cm)", title = "Ridgeline plot")
+cowplot::plot_grid(p1, p2, p3, nrow = 1)
 ```
 
-The [density plot](https://en.wikipedia.org/wiki/Kernel_density_estimation) on the left is like a smooth histogram that doesn't discretize the variable into bins. The [violin plot](https://en.wikipedia.org/wiki/Violin_plot) on the right is a rotated version that makes it easier to perform the comparison because the densities (distributions) are not overlapping.
+The [density plot](https://en.wikipedia.org/wiki/Kernel_density_estimation) on the left is like a smooth histogram that doesn't discretize the variable into bins. The [violin plot](https://en.wikipedia.org/wiki/Violin_plot) in the middle is a rotated version that makes it easier to perform the comparison because the densities (distributions) are not overlapping. Recently, an alternative called *ridgeline plot* -- on the right -- gained a lot of popularity for comparing distributions across groups. (They were originally called *joyplots* but that name [was deprecated](http://serialmentor.com/blog/2017/9/15/goodbye-joyplots).)
 
 A [box-and-whiskers chart](https://en.wikipedia.org/wiki/Box_plot) (also known as a *box plot*) allows you to visually compare the distributions by way of a [five number summary](https://en.wikipedia.org/wiki/Five-number_summary) which includes:
 
@@ -322,9 +332,9 @@ pairs(
 
 At first glance there is **a lot** going on in that particular matrix, but really there are three main components that we can focus on just one at a time:
 
-1. the upper triangle panels have basic scatter plots with points colored according to species for each pair of variables,
-2. the diagonal panels have histograms of the individual variables, and
-3. the lower triangle panels are also scatterplots, but with ellipses tracing the two-dimensional densities (assuming [Normality](https://en.wikipedia.org/wiki/Multivariate_normal_distribution)).
+1. the four panels along the *diagonal* have histograms of the individual variables,
+2. the six panels in the *upper triangle* above the diagonal have basic scatter plots with points colored according to species for each pair of variables, and
+3. the six panels in the *lower triangle* below the diagonal are also scatterplots, but with ellipses tracing the two-dimensional densities (assuming [Normality](https://en.wikipedia.org/wiki/Multivariate_normal_distribution)).
 
 [Line charts](https://en.wikipedia.org/wiki/Line_chart) are the most common way to visualize [time series](https://en.wikipedia.org/wiki/Time_series) data, with time **usually** as the horizontal X axis and range of a quantitative variable as the vertical Y axis:
 
@@ -369,7 +379,7 @@ rect(0.34, 0, 0.66, 0.10, col = "white", border = "green", lwd = 4)
 text(0.5, 0.05, "Opposite for blond hair.", cex = 1.1)
 ```
 
-We can extend a mosaic plot to include *standardized residuals* (also called [*studendized residuals*](https://en.wikipedia.org/wiki/Studentized_residual)) from a [log-linear model](https://en.wikipedia.org/wiki/Log-linear_model). Cells representing <span style='color:red;font-weight:bold;'>negative residuals</span> -- meaning there are <span style='color:red;font-weight:bold;'>fewer observations than would have been expected under independence</span> -- are drawn as <span style='color:red;font-weight:bold;'>red</span> with broken borders; <span style='color:blue;font-weight:bold;'>positive residuals</span> -- meaning <span style='color:blue;font-weight:bold;'>more observations than would be expected</span> -- are drawn in <span style='color:blue;font-weight:bold;'>blue</span> with solid borders.
+We can extend a mosaic plot to include *standardized residuals* (also called [*studentized residuals*](https://en.wikipedia.org/wiki/Studentized_residual)) from a [log-linear model](https://en.wikipedia.org/wiki/Log-linear_model). Cells representing <span style='color:red;font-weight:bold;'>negative residuals</span> -- meaning there are <span style='color:red;font-weight:bold;'>fewer observations than would have been expected under independence</span> -- are drawn as <span style='color:red;font-weight:bold;'>red</span> with broken borders; <span style='color:blue;font-weight:bold;'>positive residuals</span> -- meaning <span style='color:blue;font-weight:bold;'>more observations than would be expected</span> -- are drawn in <span style='color:blue;font-weight:bold;'>blue</span> with solid borders.
 
 ```{r mosaic2, fig.height=7, fig.width=9, out.width=624}
 mosaicplot(
@@ -413,7 +423,7 @@ What the third mosaic plot tells us:
 
 ### Stacked area plots
 
-A *stacked area plot* is a way to visualize multiple amounts/proportions changes over time.
+A *stacked area plot* is a way to visualize changes in amounts (or proportions) over time.
 
 ```{r stacked_area, fig.height=6, fig.width=12, out.width=624, fig.cap='Beginning with 1925, the number of people over the age of 64 has increased dramatically, especially after 1975.'}
 library(gcookbook) # install.packages("gcookbook")
@@ -422,19 +432,21 @@ p1 <- ggplot(uspopage, aes(y = Thousands, x = Year, fill = AgeGroup)) +
   scale_y_continuous("Number of people in thousands", labels = compress) +
   scale_fill_discrete("Age group", breaks = rev(levels(uspopage$AgeGroup))) +
   ggtitle("Stacked areas", "Age distribution in the United States, 1900-2002") +
-  theme_minimal(14)
+  theme_minimal(14) +
+  guides(fill = guide_legend(reverse = TRUE))
 p2 <- ggplot(uspopage, aes(y = Thousands, x = Year, fill = AgeGroup)) +
   geom_area(color = "black", position = "fill") +
   scale_y_continuous("Proportion", labels = scales::percent_format()) +
   scale_fill_discrete("Age group", breaks = rev(levels(uspopage$AgeGroup))) +
   ggtitle("Stacked proportions", "Age distribution in the United States, 1900-2002") +
-  theme_minimal(14)
+  theme_minimal(14) +
+  guides(fill = guide_legend(reverse = TRUE))
 cowplot::plot_grid(p1, p2, nrow = 1)
 ```
 
 ### Heat maps
 
-[Heatmaps](https://en.wikipedia.org/wiki/Heat_map) are a graphical representation of matrices. For example, we can visualize the following dataset of top 50 NBA players' performance statistics from [the 2008-09 season]((https://en.wikipedia.org/wiki/2008%E2%80%9309_NBA_season)) (obtained from [RotoWire](https://www.rotowire.com/), formerly databaseBasketball):
+[Heatmaps](https://en.wikipedia.org/wiki/Heat_map) are a graphical representation of matrices. For example, we can visualize a dataset of top 50 NBA players' performance statistics from [the 2008-09 season]((https://en.wikipedia.org/wiki/2008%E2%80%9309_NBA_season)) (obtained from [RotoWire](https://www.rotowire.com/), formerly databaseBasketball):
 
 ```{r nba_data, cache=TRUE}
 # https://learnr.wordpress.com/2010/01/26/ggplot2-quick-heatmap-plotting/
@@ -450,24 +462,20 @@ colnames(nba) <- c(
 )
 nba$PF <- NULL; nba.m <- reshape2::melt(nba)
 nba.m <- plyr::ddply(nba.m, plyr::.(variable), transform, rescale = scale(value))
+nba.m$Name <- factor(nba.m$Name, levels(nba.m$Name)[order(levels(nba.m$Name))])
 ```
-
-```{r dt, dependson='nba_data', eval=FALSE}
-message("This is where the interactive NBA data table should be.")
+```{r nba_table, dependson='nba_data', eval=FALSE}
 DT::datatable(
   nba,
-  options = list(
-    order = list(1, "desc")
-  ),
+  options = list(order = list(1, "desc")),
   class = "cell-border stripe",
   rownames = FALSE, filter = "top"
 ) %>%
   DT::formatPercentage(c("Field goal %", "Free throw %", "Three-point %"))
 ```
-
 ```{r heatmap, fig.height=10, fig.width=8, out.width=624, dependson='nba_data'}
-ggplot(nba.m, aes(variable, Name)) +
-  geom_tile(aes(fill = rescale), color = "white") +
+ggplot(nba.m, aes(x = variable, y = Name, fill = rescale)) +
+  geom_tile(color = "white") +
   viridis::scale_fill_viridis(
     "Compared to other 49 players",
     breaks = c(-2, 0, 2, 4),
@@ -482,8 +490,8 @@ ggplot(nba.m, aes(variable, Name)) +
     subtitle = "Performance data from 2008-2009 season; centered and scaled",
     caption = "Source: FlowingData and RotoWire (formerly databaseBasketball)"
   ) +
-  scale_x_discrete(expand = c(0, 0)) +
-  scale_y_discrete(expand = c(0, 0)) +
+  scale_x_discrete(expand = c(0, 1)) +
+  scale_y_discrete(expand = c(0, 0), limits = rev(levels(nba.m$Name))) +
   theme(
     legend.position = "bottom", # "none",
     legend.key.width = unit(3,"line"),
@@ -611,7 +619,7 @@ p4 <- ggplot(df, aes(x = x, y = log10(y))) + geom_point() + ggtitle("Linear rela
 cowplot::plot_grid(plotlist = list(p1, p2, p3, p4))
 ```
 
-Let us revisit the pageviews data from earlier by utilizing the logarithmic axis:
+Let us revisit the pageviews data from earlier by utilizing a logarithmic axis:
 
 ```{r tsplot_log10, fig.cap='Notice how the French Wikipedia pageviews are no longer dampened by English Wikipedia pageviews\' magnitude.'}
 ggplot(pvs, aes(x = date, y = views / 1e6, color = language)) +
@@ -822,7 +830,7 @@ quiz(
 ### Further reading
 
 - [The Visual Display of Quantitative Information](https://www.edwardtufte.com/tufte/books_vdqi) by Edward Tufte
-- [Handbook of Data Visualization](http://www.springer.com/us/book/9783540330363)
+- [Handbook of Data Visualization](http://www.springer.com/us/book/9783540330363) (Editors: Chun-houh Chen, Wolfgang Karl Härdle, Antony Unwin)
 
 ### Making your own
 
