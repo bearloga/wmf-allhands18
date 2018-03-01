@@ -5,7 +5,7 @@ output:
       theme: "cosmo"
 tutorial:
   id: "org.wikimedia.mikhail.dataviz-literacy"
-  version: 0.9.5
+  version: 0.9.6
 runtime: shiny_prerendered
 ---
 
@@ -37,6 +37,23 @@ This workshop is [available as open source](https://github.com/bearloga/wmf-allh
 | **Personal** | mikhail at mpopov dot com                 |
 | **IRC**      | bearloga in #wikimedia-discovery, etc.    |
 | **Twitter**  | [bearloga](https://twitter.com/bearloga)  |
+
+<!-- Piwik -->
+<script type="text/javascript">
+  var _paq = _paq || [];
+  _paq.push(["setDomains", ["*.dataviz-literacy.wmflabs.org"]]);
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="//piwik.wikimedia.org/";
+    _paq.push(['setTrackerUrl', u+'piwik.php']);
+    _paq.push(['setSiteId', '15']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<noscript><p><img src="//piwik.wikimedia.org/piwik.php?idsite=15" style="border:0;" alt="" /></p></noscript>
+<!-- End Piwik Code -->
 
 ## Terms and basics
 

@@ -74,6 +74,26 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 </tr>
 </tbody>
 </table>
+<!-- Piwik -->
+<script type="text/javascript">
+  var _paq = _paq || [];
+  _paq.push(["setDomains", ["*.dataviz-literacy.wmflabs.org"]]);
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="//piwik.wikimedia.org/";
+    _paq.push(['setTrackerUrl', u+'piwik.php']);
+    _paq.push(['setSiteId', '15']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<noscript>
+<p>
+<img src="//piwik.wikimedia.org/piwik.php?idsite=15" style="border:0;" alt="" />
+</p>
+</noscript>
+<!-- End Piwik Code -->
 </div>
 <div id="section-terms-and-basics" class="section level2">
 <h2>Terms and basics</h2>
@@ -499,7 +519,7 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::register_http_handlers(session, metadata = list(id = "org.wikimedia.mikhail.dataviz-literacy", version = "0.9.5"))
+learnr:::register_http_handlers(session, metadata = list(id = "org.wikimedia.mikhail.dataviz-literacy", version = "0.9.6"))
 </script>
  
 <script type="application/shiny-prerendered" data-context="data">
